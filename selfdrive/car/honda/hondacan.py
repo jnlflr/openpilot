@@ -45,12 +45,13 @@ def create_gas_command(packer, gas_amount, idx):
   enable = gas_amount > 0.001
 
   values = {"ENABLE": enable}
+  bus = 0
 
   if enable:
     values["GAS_COMMAND"] = gas_amount * 255.
     values["GAS_COMMAND2"] = gas_amount * 255.
 
-  return packer.make_can_msg("GAS_COMMAND", 0, values, idx)
+  return packer.make_can_msg("GAS_COMMAND", bus, values, idx)
 
 
 def create_steering_control(packer, apply_steer, lkas_active, car_fingerprint, idx):

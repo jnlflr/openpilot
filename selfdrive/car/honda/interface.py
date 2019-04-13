@@ -168,7 +168,7 @@ class CarInterface(object):
 
     # FIXME: hardcoding honda civic 2016 touring params so they can be used to
     # scale unknown params for other cars
-    mass_civic = 2923 * CV.LB_TO_KG + std_cargo
+    mass_civic = 1190 + std_cargo
     wheelbase_civic = 2.70
     centerToFront_civic = wheelbase_civic * 0.4
     centerToRear_civic = wheelbase_civic - centerToFront_civic
@@ -556,7 +556,7 @@ class CarInterface(object):
       # TODO: button press should be the only thing that triggers enble
       if ((cur_time - self.last_enable_pressed) < 0.2 and
           (cur_time - self.last_enable_sent) > 0.2 and
-          ret.cruiseState.enabled) or \
+          ret.cruiseState.) or \
          (enable_pressed and get_events(events, [ET.NO_ENTRY])):
         events.append(create_event('buttonEnable', [ET.ENABLE]))
         self.last_enable_sent = cur_time

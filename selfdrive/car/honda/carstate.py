@@ -4,6 +4,11 @@ from selfdrive.can.parser import CANParser, CANDefine
 from selfdrive.config import Conversions as CV
 from selfdrive.car.honda.values import CAR, DBC, STEER_THRESHOLD, SPEED_FACTOR, HONDA_BOSCH
 
+# valeurs forcées :
+# standstill depuis toyota
+# door_all_closed
+# seatbelt
+
 def parse_gear_shifter(gear, vals):
 
   val_to_capnp = {'P': 'park', 'R': 'reverse', 'N': 'neutral',
@@ -36,7 +41,8 @@ def get_can_signals(CP):
       ("WHEEL_SPEED_RR", "WHEEL_SPEEDS", 0),
       ("STEER_ANGLE", "STEERING_SENSORS", 0),
       ("STEER_ANGLE_RATE", "STEERING_SENSORS", 0),
-      ("STEER_TORQUE_SENSOR", "STEER_STATUS", 0),
+      #("STEER_TORQUE_SENSOR", "STEER_STATUS", 0),
+      ("STEER_TORQUE_SENSOR", "EPS", 0),
       ("LEFT_BLINKER", "SCM_FEEDBACK", 0),
       ("RIGHT_BLINKER", "SCM_FEEDBACK", 0),
       ("GEAR", "GEARBOX", 0),
@@ -190,12 +196,16 @@ class CarState(object):
     # ******************* parse out can *******************
 
     if self.CP.carFingerprint in (CAR.ACCORD, CAR.ACCORD_15, CAR.ACCORDH, CAR.CIVIC_BOSCH): # TODO: find wheels moving bit in dbc
-      self.standstill = cp.vl["ENGINE_DATA"]['XMISSION_SPEED'] < 0.1
-      self.door_all_closed = not cp.vl["SCM_FEEDBACK"]['DRIVERS_DOOR_OPEN']
+      #self.standstill = cp.vl["ENGINE_DATA"]['XMISSION_SPEED'] < 0.1
+      self.standstill = not self.v_wheel > 0.001
+      #self.door_all_closed = not cp.vl["SCM_FEEDBACK"]['DRIVERS_DOOR_OPEN']
+      self.door_all_closed = 1
     else:
-      self.standstill = not cp.vl["STANDSTILL"]['WHEELS_MOVING']
-      self.door_all_closed = not any([cp.vl["DOORS_STATUS"]['DOOR_OPEN_FL'], cp.vl["DOORS_STATUS"]['DOOR_OPEN_FR'],
-                                      cp.vl["DOORS_STATUS"]['DOOR_OPEN_RL'], cp.vl["DOORS_STATUS"]['DOOR_OPEN_RR']])
+      #self.standstill = not cp.vl["STANDSTILL"]['WHEELS_MOVING']
+      self.standstill = not self.v_wheel > 0.001
+      #self.door_all_closed = not any([cp.vl["DOORS_STATUS"]['DOOR_OPEN_FL'], cp.vl["DOORS_STATUS"]['DOOR_OPEN_FR'],
+      #                                cp.vl["DOORS_STATUS"]['DOOR_OPEN_RL'], cp.vl["DOORS_STATUS"]['DOOR_OPEN_RR']])
+      self.door_all_closed = 1
     self.seatbelt = not cp.vl["SEATBELT_STATUS"]['SEATBELT_DRIVER_LAMP'] and cp.vl["SEATBELT_STATUS"]['SEATBELT_DRIVER_LATCHED']
 
     # 2 = temporary; 3 = TBD; 4 = temporary, hit a bump; 5 = (permanent); 6 = temporary; 7 = (permanent)
