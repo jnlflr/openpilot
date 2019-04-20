@@ -31,43 +31,30 @@ def calc_cruise_offset(offset, speed):
 def get_can_signals(CP):
 # this function generates lists for signal, messages and initial values
   signals = [
-      ("XMISSION_SPEED", "ENGINE_DATA", 0),
-      ("WHEEL_SPEED_FL", "WHEEL_SPEEDS", 0),
-      ("WHEEL_SPEED_FR", "WHEEL_SPEEDS", 0),
+      ("SPEED_ABS", "ABS", 0),
+      ("WHEEL_SPEED_FT", "WHEEL_SPEEDS", 0),
       ("WHEEL_SPEED_RL", "WHEEL_SPEEDS", 0),
       ("WHEEL_SPEED_RR", "WHEEL_SPEEDS", 0),
       ("STEER_ANGLE", "STEERING_SENSORS", 0),
       ("STEER_ANGLE_RATE", "STEERING_SENSORS", 0),
-      ("STEER_TORQUE_SENSOR", "STEER_STATUS", 0),
-      ("LEFT_BLINKER", "SCM_FEEDBACK", 0),
-      ("RIGHT_BLINKER", "SCM_FEEDBACK", 0),
-      ("GEAR", "GEARBOX", 0),
-      ("SEATBELT_DRIVER_LAMP", "SEATBELT_STATUS", 1),
-      ("SEATBELT_DRIVER_LATCHED", "SEATBELT_STATUS", 0),
+      ("STEER_TORQUE_SENSOR", "EPS", 0),
       ("BRAKE_PRESSED", "POWERTRAIN_DATA", 0),
-      ("BRAKE_SWITCH", "POWERTRAIN_DATA", 0),
-      ("CRUISE_BUTTONS", "SCM_BUTTONS", 0),
-      ("ESP_DISABLED", "VSA_STATUS", 1),
-      ("HUD_LEAD", "ACC_HUD", 0),
-      ("USER_BRAKE", "VSA_STATUS", 0),
-      ("STEER_STATUS", "STEER_STATUS", 5),
-      ("GEAR_SHIFTER", "GEARBOX", 0),
+      ("CRUISE_BUTTONS", "MACCHINA", 0),
+      ("STEER_STATUS", "MACCHINA", 0),  # était à 5 : "fault_1"
       ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
-      ("CRUISE_SETTING", "SCM_BUTTONS", 0),
-      ("ACC_STATUS", "POWERTRAIN_DATA", 0),
+      ("CRUISE_SETTING", "MACCHINA", 0),
+      ("ACC_STATUS", "MACCHINA", 0),
+      ("MAIN_ON", "MACCHINA", 0),
+      ("STEER_TORQUE_DRIVER", "MACCHINA", 0),
   ]
 
   checks = [
-      ("ENGINE_DATA", 100),
-      ("WHEEL_SPEEDS", 50),
-      ("STEERING_SENSORS", 100),
-      ("SCM_FEEDBACK", 10),
-      ("GEARBOX", 100),
-      ("SEATBELT_STATUS", 10),
-      ("CRUISE", 10),
       ("POWERTRAIN_DATA", 100),
-      ("VSA_STATUS", 50),
-      ("SCM_BUTTONS", 25),
+      ("WHEEL_SPEEDS", 25),
+      ("STEERING_SENSORS", 100),
+      ("EPS", 100),
+      ("ABS", 25),
+      ("MACCHINA", 100),
   ]
 
   if CP.radarOffCan:
