@@ -31,30 +31,11 @@ def calc_cruise_offset(offset, speed):
 def get_can_signals(CP):
 # this function generates lists for signal, messages and initial values
   signals = [
-      ("SPEED_ABS", "ABS", 0),
-      ("WHEEL_SPEED_FT", "WHEEL_SPEEDS", 0),
-      ("WHEEL_SPEED_RL", "WHEEL_SPEEDS", 0),
-      ("WHEEL_SPEED_RR", "WHEEL_SPEEDS", 0),
-      ("STEER_ANGLE", "STEERING_SENSORS", 0),
-      ("STEER_ANGLE_RATE", "STEERING_SENSORS", 0),
-      ("STEER_TORQUE_SENSOR", "EPS", 0),
-      ("BRAKE_PRESSED", "POWERTRAIN_DATA", 0),
-      ("CRUISE_BUTTONS", "MACCHINA", 0),
-      ("STEER_STATUS", "MACCHINA", 0),  # était à 5 : "fault_1"
-      ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
-      ("CRUISE_SETTING", "MACCHINA", 0),
-      ("ACC_STATUS", "MACCHINA", 0),
-      ("MAIN_ON", "MACCHINA", 0),
-      ("STEER_TORQUE_DRIVER", "MACCHINA", 0),
+      
   ]
 
   checks = [
-      ("POWERTRAIN_DATA", 100),
-      ("WHEEL_SPEEDS", 25),
-      ("STEERING_SENSORS", 100),
-      ("EPS", 100),
-      ("ABS", 25),
-      ("MACCHINA", 100),
+      
   ]
 
   if CP.radarOffCan:
