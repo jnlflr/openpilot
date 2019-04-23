@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import numpy as np
-from cereal import car, log
+from cereal import car
 from common.numpy_fast import clip, interp
 from common.realtime import sec_since_boot
 from selfdrive.swaglog import cloudlog
@@ -155,7 +155,7 @@ class CarInterface(object):
     else:
       ret.safetyModel = car.CarParams.SafetyModels.honda
       ret.enableCamera = not any(x for x in CAMERA_MSGS if x in fingerprint)
-      ret.enableGasInterceptor = 0x201 in fingerprint
+      ret.enableGasInterceptor = 0x201 in fingerprint # correspond à 513 en décimal !
       ret.openpilotLongitudinalControl = ret.enableCamera
 
     cloudlog.warn("ECU Camera Simulated: %r", ret.enableCamera)
@@ -168,7 +168,7 @@ class CarInterface(object):
 
     # FIXME: hardcoding honda civic 2016 touring params so they can be used to
     # scale unknown params for other cars
-    mass_civic = 2923 * CV.LB_TO_KG + std_cargo
+    mass_civic = 1190 + std_cargo
     wheelbase_civic = 2.70
     centerToFront_civic = wheelbase_civic * 0.4
     centerToRear_civic = wheelbase_civic - centerToFront_civic
@@ -187,7 +187,7 @@ class CarInterface(object):
 
     ret.steerKf = 0.00006 # conservative feed-forward
 
-    if candidate in [CAR.CIVIC, CAR.CIVIC_BOSCH]:
+    if candidate in [CAR.CIVIC, CAR.CIVIC_BOSCH, P_308_2018]:
       stop_and_go = True
       ret.mass = mass_civic
       ret.wheelbase = wheelbase_civic
@@ -556,7 +556,7 @@ class CarInterface(object):
       # TODO: button press should be the only thing that triggers enble
       if ((cur_time - self.last_enable_pressed) < 0.2 and
           (cur_time - self.last_enable_sent) > 0.2 and
-          ret.cruiseState.enabled) or \
+          ret.cruiseState.) or \
          (enable_pressed and get_events(events, [ET.NO_ENTRY])):
         events.append(create_event('buttonEnable', [ET.ENABLE]))
         self.last_enable_sent = cur_time
@@ -575,7 +575,7 @@ class CarInterface(object):
 
   # pass in a car.CarControl
   # to be called @ 100hz
-  def apply(self, c, perception_state=log.Live20Data.new_message()):
+  def apply(self, c):
     if c.hudControl.speedVisible:
       hud_v_cruise = c.hudControl.setSpeed * CV.MS_TO_KPH
     else:
@@ -584,19 +584,19 @@ class CarInterface(object):
     hud_alert = VISUAL_HUD[c.hudControl.visualAlert.raw]
     snd_beep, snd_chime = AUDIO_HUD[c.hudControl.audibleAlert.raw]
 
-    pcm_accel = int(clip(c.cruiseControl.accelOverride,0,1)*0xc6)
+    pcm_accel = int(clip(c.cruiseControl.accelOverride, 0, 1) * 0xc6)
 
-    self.CC.update(self.sendcan, c.enabled, self.CS, self.frame, \
-      c.actuators, \
-      c.cruiseControl.speedOverride, \
-      c.cruiseControl.override, \
-      c.cruiseControl.cancel, \
-      pcm_accel, \
-      perception_state.radarErrors, \
-      hud_v_cruise, c.hudControl.lanesVisible, \
-      hud_show_car = c.hudControl.leadVisible, \
-      hud_alert = hud_alert, \
-      snd_beep = snd_beep, \
-      snd_chime = snd_chime)
+    self.CC.update(self.sendcan, c.enabled, self.CS, self.frame,
+                   c.actuators,
+                   c.cruiseControl.speedOverride,
+                   c.cruiseControl.override,
+                   c.cruiseControl.cancel,
+                   pcm_accel,
+                   hud_v_cruise,
+                   c.hudControl.lanesVisible,
+                   hud_show_car=c.hudControl.leadVisible,
+                   hud_alert=hud_alert,
+                   snd_beep=snd_beep,
+                   snd_chime=snd_chime)
 
     self.frame += 1
