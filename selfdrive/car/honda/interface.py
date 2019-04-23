@@ -556,7 +556,7 @@ class CarInterface(object):
       # TODO: button press should be the only thing that triggers enble
       if ((cur_time - self.last_enable_pressed) < 0.2 and
           (cur_time - self.last_enable_sent) > 0.2 and
-          ret.cruiseState.) or \
+          ret.cruiseState.enabled) or \
          (enable_pressed and get_events(events, [ET.NO_ENTRY])):
         events.append(create_event('buttonEnable', [ET.ENABLE]))
         self.last_enable_sent = cur_time
