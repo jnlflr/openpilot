@@ -4,7 +4,7 @@ from selfdrive.can.parser import CANParser, CANDefine
 from selfdrive.config import Conversions as CV
 from selfdrive.car.honda.values import CAR, DBC, STEER_THRESHOLD, SPEED_FACTOR, HONDA_BOSCH
 
-# valeurs forcées :
+# valeurs forcees :
 # standstill depuis toyota
 # door_all_closed
 # seatbelt
@@ -134,7 +134,7 @@ def get_can_signals(CP):
   # add gas interceptor reading if we are using it
   if CP.enableGasInterceptor: # ne se declenche que si l'id du gas interceptor est dedans
     signals.append(("INTERCEPTOR_GAS", "GAS_SENSOR", 0))
-    checks.append(("GAS_SENSOR", 100)) #100 car a 10ms indexé sur 0x208
+    checks.append(("GAS_SENSOR", 100)) #100 car a 10ms indexe sur 0x208
 
   return signals, checks
 
