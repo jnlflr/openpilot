@@ -177,7 +177,7 @@ STEER_THRESHOLD = {
   CAR.PILOT: 1200,
   CAR.PILOT_2019: 1200,
   CAR.RIDGELINE: 1200,
-  CAR.P_308_2018: 1200,  # potentiellement à modifier pour essayer d'aller au dessus
+  CAR.P_308_2018: 1200,  # potentiellement a modifier pour essayer d'aller au dessus
 }
 
 SPEED_FACTOR = {

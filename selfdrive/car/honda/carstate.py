@@ -56,7 +56,7 @@ def get_can_signals(CP):
       #("HUD_LEAD", "ACC_HUD", 0),
       #("USER_BRAKE", "VSA_STATUS", 0),
       #("STEER_STATUS", "STEER_STATUS", 5),
-      ("STEER_STATUS", "MACCHINA", 0),  # était à 5 : "fault_1"
+      ("STEER_STATUS", "MACCHINA", 0),  # etait a 5 : "fault_1"
       #("GEAR_SHIFTER", "GEARBOX", 0),         ???
       ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
       #("CRUISE_SETTING", "SCM_BUTTONS", 0),   ???
@@ -87,7 +87,7 @@ def get_can_signals(CP):
     """if CP.carFingerprint not in (CAR.ACCORDH, CAR.CIVIC_BOSCH):
       signals += [("BRAKE_PRESSED", "BRAKE_MODULE", 0)]
       checks += [("BRAKE_MODULE", 50)]"""
-    # Ignore car apparemment le GAS_PEDAL_2 ne sert à rien dans le code
+    # Ignore car apparemment le GAS_PEDAL_2 ne sert a rien dans le code
     """signals += [("CAR_GAS", "GAS_PEDAL_2", 0),
                 #("MAIN_ON", "SCM_FEEDBACK", 0),
                 ("MAIN_ON", "MACCHINA", 0),
@@ -132,9 +132,9 @@ def get_can_signals(CP):
                 ("CAR_GAS", "GAS_PEDAL_2", 0)]"""
 
   # add gas interceptor reading if we are using it
-  if CP.enableGasInterceptor: # ne se déclenche que si l'id du gas interceptor est dedans
+  if CP.enableGasInterceptor: # ne se declenche que si l'id du gas interceptor est dedans
     signals.append(("INTERCEPTOR_GAS", "GAS_SENSOR", 0))
-    checks.append(("GAS_SENSOR", 100)) #100 car à 10ms indexé sur 0x208
+    checks.append(("GAS_SENSOR", 100)) #100 car a 10ms indexé sur 0x208
 
   return signals, checks
 
@@ -289,7 +289,7 @@ class CarState(object):
     self.steer_torque_driver = cp.vl["MACCHINA"]['STEER_TORQUE_DRIVER']
     self.steer_override = abs(self.steer_torque_driver) > STEER_THRESHOLD[self.CP.carFingerprint]
 
-    # ATTENTION à changer:
+    # ATTENTION a changer:
     self.brake_switch = 0 # voir si pas de pb, pas de brake switch sur Toyota
 
     if self.CP.radarOffCan:
