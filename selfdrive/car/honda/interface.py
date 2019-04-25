@@ -187,7 +187,7 @@ class CarInterface(object):
 
     ret.steerKf = 0.00006 # conservative feed-forward
 
-    if candidate in [CAR.CIVIC, CAR.CIVIC_BOSCH, P_308_2018]:
+    if candidate in [CAR.CIVIC, CAR.CIVIC_BOSCH, CAR.P_308_2018]:
       stop_and_go = True
       ret.mass = mass_civic
       ret.wheelbase = wheelbase_civic
