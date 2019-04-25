@@ -160,7 +160,7 @@ class CarState(object):
   def __init__(self, CP):
     self.CP = CP
     self.can_define = CANDefine(DBC[CP.carFingerprint]['pt'])
-    self.shifter_values = 8
+    self.shifter_values = 'D'
 
     self.user_gas, self.user_gas_pressed = 0., 0
     self.brake_switch_prev = 0
@@ -280,7 +280,7 @@ class CarState(object):
       self.main_on = cp.vl["MACCHINA"]['MAIN_ON']
 
     #can_gear_shifter = int(cp.vl["GEARBOX"]['GEAR_SHIFTER'])
-    can_gear_shifter = 8
+    can_gear_shifter = 'D'
     self.gear_shifter = parse_gear_shifter(can_gear_shifter, self.shifter_values)
 
     self.pedal_gas = cp.vl["POWERTRAIN_DATA"]['PEDAL_GAS']
