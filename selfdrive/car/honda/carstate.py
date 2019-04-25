@@ -47,7 +47,7 @@ def get_can_signals(CP):
       ("STEER_TORQUE_SENSOR", "EPS", 0),
       #("LEFT_BLINKER", "SCM_FEEDBACK", 0),
       #("RIGHT_BLINKER", "SCM_FEEDBACK", 0),
-      #("GEAR", "GEARBOX", 0),                           ???
+      ("GEAR", "MACCHINA", 0),
       #("SEATBELT_DRIVER_LAMP", "SEATBELT_STATUS", 1),
       #("SEATBELT_DRIVER_LATCHED", "SEATBELT_STATUS", 0),
       ("BRAKE_PRESSED", "POWERTRAIN_DATA", 0),
@@ -57,7 +57,7 @@ def get_can_signals(CP):
       #("USER_BRAKE", "VSA_STATUS", 0),
       #("STEER_STATUS", "STEER_STATUS", 5),
       ("STEER_STATUS", "MACCHINA", 0),  # etait a 5 : "fault_1"
-      #("GEAR_SHIFTER", "GEARBOX", 0),         ???
+      ("GEAR_SHIFTER", "MACCHINA", 0),
       ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
       #("CRUISE_SETTING", "SCM_BUTTONS", 0),   ???
       ("CRUISE_SETTING", "MACCHINA", 0),   #???
@@ -160,7 +160,7 @@ class CarState(object):
   def __init__(self, CP):
     self.CP = CP
     self.can_define = CANDefine(DBC[CP.carFingerprint]['pt'])
-    self.shifter_values = 'D'
+    self.shifter_values = self.can_define.dv["MACCHINA"]["GEAR_SHIFTER"]
 
     self.user_gas, self.user_gas_pressed = 0., 0
     self.brake_switch_prev = 0
@@ -259,8 +259,8 @@ class CarState(object):
       self.user_gas = cp.vl["GAS_SENSOR"]['INTERCEPTOR_GAS']
       self.user_gas_pressed = self.user_gas > 0 # this works because interceptor read < 0 when pedal position is 0. Once calibrated, this will change
 
-    #self.gear = 0 if self.CP.carFingerprint == CAR.CIVIC else cp.vl["GEARBOX"]['GEAR']
-    self.gear = 4 # cf DBC Honda
+    self.gear = 0 if self.CP.carFingerprint == CAR.CIVIC else cp.vl["MACCHINA"]['GEAR']
+    #self.gear = 4 # cf DBC Honda
     self.angle_steers = cp.vl["STEERING_SENSORS"]['STEER_ANGLE']
     self.angle_steers_rate = cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE']
 
@@ -279,8 +279,7 @@ class CarState(object):
       self.park_brake = 0
       self.main_on = cp.vl["MACCHINA"]['MAIN_ON']
 
-    #can_gear_shifter = int(cp.vl["GEARBOX"]['GEAR_SHIFTER'])
-    can_gear_shifter = int('D')
+    can_gear_shifter = int(cp.vl["MACCHINA"]['GEAR_SHIFTER'])
     self.gear_shifter = parse_gear_shifter(can_gear_shifter, self.shifter_values)
 
     self.pedal_gas = cp.vl["POWERTRAIN_DATA"]['PEDAL_GAS']

@@ -81,6 +81,8 @@ BO_ 649 MACCHINA: 8 MACC
  SG_ CRUISE_BUTTONS : 46|3@0+ (1,0) [0|7] "" EON
  SG_ CRUISE_SPEED_OFFSET : 55|8@0- (0.1,0) [-128|127] "kph" EON
  SG_ CRUISE_SPEED_PCM : 63|8@0+ (1,0) [0|255] "kph?" EON
+ SG_ GEAR_SHIFTER : 24|4@1+ (1,0) [0|15] "" EON
+ SG_ GEAR : 31|4@0+ (1,0) [0|15] "" EON
 
 BO_ 1101 WHEEL_SPEEDS: 8 PCM
  SG_ WHEEL_SPEED_FT : 7|16@0+ (0.01,0) [0|65535] "km/h" EON
@@ -102,7 +104,7 @@ BO_ 840 GEARBOX: 8 PCM
  SG_ NEW_SIGNAL_2 : 16|8@1+ (1,0) [0|255] "" XXX
  SG_ NEW_SIGNAL_3 : 24|8@1+ (1,0) [0|255] "" XXX
  SG_ CLUTCH_PRESSED : 36|2@0+ (1,0) [0|3] "" XXX
- SG_ GEAR : 7|4@0+ (1,0) [0|15] "" XXX
+ SG_ GEAR_1 : 7|4@0+ (1,0) [0|15] "" XXX
 
 BO_ 909 ABS: 7 ABS
  SG_ DISTANCE_ABS : 23|16@0+ (0.1,0) [0|65535] "m" EON
@@ -125,6 +127,8 @@ BO_ 1294 CRUISE: 8 XXX
 
 CM_ SG_ 520 BRAKE_PRESSED "0: brake off, 1: brake on";
 CM_ SG_ 520 ACC_STATUS "00: off, 01: reprise pedale, 10: ON";
-CM_ SG_ 840 GEAR "0: débrayé ou point mort, 1: première, 2: deuxième, 3: troisième, 4: quatrième, 5: cinquième, 9: marche arrière";
+CM_ SG_ 840 GEAR_1 "0: débrayé ou point mort, 1: première, 2: deuxième, 3: troisième, 4: quatrième, 5: cinquième, 9: marche arrière";
 CM_ SG_ 1101 WHEEL_SPEED_FT "vitesse moyenne des deux roues avant";
-VAL_ 840 GEAR 9 "R" 5 "5eme" 4 "4eme" 3 "3eme" 2 "2nd" 1 "1ere" 0 "Pt_mort";
+VAL_ 840 GEAR_1 9 "R" 5 "5eme" 4 "4eme" 3 "3eme" 2 "2nd" 1 "1ere" 0 "Pt_mort";
+VAL_ 649 GEAR_SHIFTER 32 "L" 16 "S" 8 "D" 4 "N" 2 "R" 1 "P" ;
+VAL_ 649 GEAR 7 "L" 10 "S" 4 "D" 3 "N" 2 "R" 1 "P" ;
