@@ -307,7 +307,7 @@ class CarState(object):
     else:
       self.brake_switch = 0
       #self.cruise_speed_offset = calc_cruise_offset(cp.vl["CRUISE_PARAMS"]['CRUISE_SPEED_OFFSET'], self.v_ego)
-      self.cruise_speed_offset = calc_cruise_offset(cp.vl["MACCHINA"]['CRUISE_SPEED_OFFSET'], self.v_ego)
+      self.cruise_speed_offset = calc_cruise_offset(0, self.v_ego)
       #self.v_cruise_pcm = cp.vl["CRUISE"]['CRUISE_SPEED_PCM']
       self.v_cruise_pcm = cp.vl["MACCHINA"]['CRUISE_SPEED_PCM']
       # brake switch has shown some single time step noise, so only considered when
