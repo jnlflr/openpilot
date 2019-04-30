@@ -309,7 +309,7 @@ class CarState(object):
       #self.cruise_speed_offset = calc_cruise_offset(cp.vl["CRUISE_PARAMS"]['CRUISE_SPEED_OFFSET'], self.v_ego)
       self.cruise_speed_offset = calc_cruise_offset(0, self.v_ego)
       #self.v_cruise_pcm = cp.vl["CRUISE"]['CRUISE_SPEED_PCM']
-      self.v_cruise_pcm = cp.vl["MACCHINA"]['CRUISE_SPEED_PCM']
+      self.v_cruise_pcm = 0
       # brake switch has shown some single time step noise, so only considered when
       # switch is on for at least 2 consecutive CAN samples
       self.brake_pressed = cp.vl["POWERTRAIN_DATA"]['BRAKE_PRESSED']
