@@ -15,12 +15,12 @@ function launch {
   wpa_cli IFNAME=wlan0 SCAN
 
   # apply update
-  if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
-    git reset --hard @{u} &&
-    git clean -xdf &&
+  #if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
+  #  git reset --hard @{u} &&
+  #  git clean -xdf &&
 
-    exec "${BASH_SOURCE[0]}"
-  fi
+  #  exec "${BASH_SOURCE[0]}"
+  #fi
 
   # no cpu rationing for now
   echo 0-3 > /dev/cpuset/background/cpus
