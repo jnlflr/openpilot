@@ -37,14 +37,14 @@ function launch {
   fi
 
   # Check for NEOS update
-  if [ $(< /VERSION) != "13" ]; then
-    if [ -f "$DIR/scripts/continue.sh" ]; then
-      cp "$DIR/scripts/continue.sh" "/data/data/com.termux/files/continue.sh"
-    fi
+  #if [ $(< /VERSION) != "13" ]; then
+  #  if [ -f "$DIR/scripts/continue.sh" ]; then
+  #    cp "$DIR/scripts/continue.sh" "/data/data/com.termux/files/continue.sh"
+  #  fi
 
-    git clean -xdf
-    "$DIR/installer/updater/updater" "file://$DIR/installer/updater/update.json"
-  fi
+  #  git clean -xdf
+  #  "$DIR/installer/updater/updater" "file://$DIR/installer/updater/update.json"
+  #fi
 
 
   # handle pythonpath
