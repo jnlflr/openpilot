@@ -133,14 +133,14 @@ managed_processes = {
   "logcatd": ("selfdrive/logcatd", ["./logcatd"]),
   "proclogd": ("selfdrive/proclogd", ["./proclogd"]),
   "boardd": ("selfdrive/boardd", ["./boardd"]),   # not used directly
-  "pandad": "selfdrive.pandad",
+#  "pandad": "selfdrive.pandad",
   "ui": ("selfdrive/ui", ["./ui"]),
   "calibrationd": "selfdrive.locationd.calibrationd",
   "paramsd": ("selfdrive/locationd", ["./paramsd"]),
   "camerad": ("selfdrive/camerad", ["./camerad"]),
   "sensord": ("selfdrive/sensord", ["./sensord"]),
   "gpsd": ("selfdrive/sensord", ["./gpsd"]),
-  "updated": "selfdrive.updated",
+#  "updated": "selfdrive.updated",
   "monitoringd": ("selfdrive/modeld", ["./monitoringd"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
 }
@@ -168,7 +168,7 @@ persistent_processes = [
   'tombstoned',
   'uploader',
   'ui',
-  'updated',
+#  'updated',
 ]
 
 car_started_processes = [
@@ -368,8 +368,8 @@ def manager_thread():
   pm_apply_packages('enable')
   start_frame()
 
-  if os.getenv("NOBOARD") is None:
-    start_managed_process("pandad")
+  #if os.getenv("NOBOARD") is None:
+  #  start_managed_process("pandad")
 
   logger_dead = False
 
