@@ -42,16 +42,6 @@ namespace {
 
 volatile sig_atomic_t do_exit = 0;
 
-struct __attribute__((packed)) timestamp_t {
-    uint16_t year;
-    uint8_t month;
-    uint8_t day;
-    uint8_t weekday;
-    uint8_t hour;
-    uint8_t minute;
-    uint8_t second;
-};
-
 libusb_context *ctx = NULL;
 libusb_device_handle *dev_handle;
 pthread_mutex_t usb_lock;
@@ -69,11 +59,6 @@ bool connected_once = false;
 bool ignition_last = false;
 
 pthread_t safety_setter_thread_handle = -1;
-pthread_t pigeon_thread_handle = -1;
-bool pigeon_needs_init;
-
-void pigeon_init();
-void *pigeon_thread(void *crap);
 
 void *safety_setter_thread(void *s) {
   // diagnostic only is the default, needed for VIN query
@@ -200,49 +185,6 @@ bool usb_connect() {
   libusb_control_transfer(dev_handle, 0xc0, 0xc1, 0, 0, hw_query, 1, TIMEOUT);
 
   hw_type = (cereal::HealthData::HwType)(hw_query[0]);
-  is_pigeon = (hw_type == cereal::HealthData::HwType::GREY_PANDA) ||
-              (hw_type == cereal::HealthData::HwType::BLACK_PANDA) ||
-              (hw_type == cereal::HealthData::HwType::UNO);
-  if (is_pigeon) {
-    LOGW("panda with gps detected");
-    pigeon_needs_init = true;
-    if (pigeon_thread_handle == -1) {
-      err = pthread_create(&pigeon_thread_handle, NULL, pigeon_thread, NULL);
-      assert(err == 0);
-    }
-  }
-
-  if (hw_type == cereal::HealthData::HwType::UNO){
-    // Get time from system
-    time_t rawtime;
-    time(&rawtime);
-
-    struct tm * sys_time = gmtime(&rawtime);
-
-    // Get time from RTC
-    timestamp_t rtc_time;
-    libusb_control_transfer(dev_handle, 0xc0, 0xa0, 0, 0, (unsigned char*)&rtc_time, sizeof(rtc_time), TIMEOUT);
-
-    //printf("System: %d-%d-%d\t%d:%d:%d\n", 1900 + sys_time->tm_year, 1 + sys_time->tm_mon, sys_time->tm_mday, sys_time->tm_hour, sys_time->tm_min, sys_time->tm_sec);
-    //printf("RTC: %d-%d-%d\t%d:%d:%d\n", rtc_time.year, rtc_time.month, rtc_time.day, rtc_time.hour, rtc_time.minute, rtc_time.second);
-
-    // Update system time from RTC if it looks off, and RTC time is good
-    if (1900 + sys_time->tm_year < 2019 && rtc_time.year >= 2019){
-      LOGE("System time wrong, setting from RTC");
-
-      struct tm new_time = { 0 };
-      new_time.tm_year = rtc_time.year - 1900;
-      new_time.tm_mon  = rtc_time.month - 1;
-      new_time.tm_mday = rtc_time.day;
-      new_time.tm_hour = rtc_time.hour;
-      new_time.tm_min  = rtc_time.minute;
-      new_time.tm_sec  = rtc_time.second;
-
-      setenv("TZ","UTC",1);
-      const struct timeval tv = {mktime(&new_time), 0};
-      settimeofday(&tv, 0);
-    }
-  }
 
   return true;
 fail:
@@ -404,48 +346,12 @@ void can_health(PubSocket *publisher) {
   }
 #endif
 
-  // clear VIN, CarParams, and set new safety on car start
-  if (ignition && !ignition_last) {
-
-    int result = delete_db_value(NULL, "CarVin");
-    assert((result == 0) || (result == ERR_NO_VALUE));
-    result = delete_db_value(NULL, "CarParams");
-    assert((result == 0) || (result == ERR_NO_VALUE));
-
-    if (safety_setter_thread_handle == -1) {
-      err = pthread_create(&safety_setter_thread_handle, NULL, safety_setter_thread, NULL);
-      assert(err == 0);
-    }
-  }
-
   // Get fan RPM
   uint16_t fan_speed_rpm = 0;
 
   pthread_mutex_lock(&usb_lock);
   int sz = libusb_control_transfer(dev_handle, 0xc0, 0xb2, 0, 0, (unsigned char*)&fan_speed_rpm, sizeof(fan_speed_rpm), TIMEOUT);
   pthread_mutex_unlock(&usb_lock);
-
-  // Write to rtc once per minute when no ignition present
-  if ((hw_type == cereal::HealthData::HwType::UNO) && !ignition && (no_ignition_cnt % 120 == 1)){
-    // Get time from system
-    time_t rawtime;
-    time(&rawtime);
-
-    struct tm * sys_time = gmtime(&rawtime);
-
-    // Write time to RTC if it looks reasonable
-    if (1900 + sys_time->tm_year >= 2019){
-      pthread_mutex_lock(&usb_lock);
-      libusb_control_transfer(dev_handle, 0x40, 0xa1, (uint16_t)(1900 + sys_time->tm_year), 0, NULL, 0, TIMEOUT);
-      libusb_control_transfer(dev_handle, 0x40, 0xa2, (uint16_t)(1 + sys_time->tm_mon), 0, NULL, 0, TIMEOUT);
-      libusb_control_transfer(dev_handle, 0x40, 0xa3, (uint16_t)sys_time->tm_mday, 0, NULL, 0, TIMEOUT);
-      // libusb_control_transfer(dev_handle, 0x40, 0xa4, (uint16_t)(1 + sys_time->tm_wday), 0, NULL, 0, TIMEOUT);
-      libusb_control_transfer(dev_handle, 0x40, 0xa5, (uint16_t)sys_time->tm_hour, 0, NULL, 0, TIMEOUT);
-      libusb_control_transfer(dev_handle, 0x40, 0xa6, (uint16_t)sys_time->tm_min, 0, NULL, 0, TIMEOUT);
-      libusb_control_transfer(dev_handle, 0x40, 0xa7, (uint16_t)sys_time->tm_sec, 0, NULL, 0, TIMEOUT);
-      pthread_mutex_unlock(&usb_lock);
-    }
-  }
 
   ignition_last = ignition;
 
@@ -694,95 +600,12 @@ void *hardware_control_thread(void *crap) {
   return NULL;
 }
 
-#define pigeon_send(x) _pigeon_send(x, sizeof(x)-1)
-
 void hexdump(unsigned char *d, int l) {
   for (int i = 0; i < l; i++) {
     if (i!=0 && i%0x10 == 0) printf("\n");
     printf("%2.2X ", d[i]);
   }
   printf("\n");
-}
-
-void _pigeon_send(const char *dat, int len) {
-  int sent;
-  unsigned char a[0x20];
-  int err;
-  a[0] = 1;
-  for (int i=0; i<len; i+=0x20) {
-    int ll = std::min(0x20, len-i);
-    memcpy(&a[1], &dat[i], ll);
-    pthread_mutex_lock(&usb_lock);
-    err = libusb_bulk_transfer(dev_handle, 2, a, ll+1, &sent, TIMEOUT);
-    if (err < 0) { handle_usb_issue(err, __func__); }
-    /*assert(err == 0);
-    assert(sent == ll+1);*/
-    //hexdump(a, ll+1);
-    pthread_mutex_unlock(&usb_lock);
-  }
-}
-
-void pigeon_set_power(int power) {
-  pthread_mutex_lock(&usb_lock);
-  int err = libusb_control_transfer(dev_handle, 0xc0, 0xd9, power, 0, NULL, 0, TIMEOUT);
-  if (err < 0) { handle_usb_issue(err, __func__); }
-  pthread_mutex_unlock(&usb_lock);
-}
-
-void pigeon_set_baud(int baud) {
-  int err;
-  pthread_mutex_lock(&usb_lock);
-  err = libusb_control_transfer(dev_handle, 0xc0, 0xe2, 1, 0, NULL, 0, TIMEOUT);
-  if (err < 0) { handle_usb_issue(err, __func__); }
-  err = libusb_control_transfer(dev_handle, 0xc0, 0xe4, 1, baud/300, NULL, 0, TIMEOUT);
-  if (err < 0) { handle_usb_issue(err, __func__); }
-  pthread_mutex_unlock(&usb_lock);
-}
-
-void pigeon_init() {
-  usleep(1000*1000);
-  LOGW("panda GPS start");
-
-  // power off pigeon
-  pigeon_set_power(0);
-  usleep(100*1000);
-
-  // 9600 baud at init
-  pigeon_set_baud(9600);
-
-  // power on pigeon
-  pigeon_set_power(1);
-  usleep(500*1000);
-
-  // baud rate upping
-  pigeon_send("\x24\x50\x55\x42\x58\x2C\x34\x31\x2C\x31\x2C\x30\x30\x30\x37\x2C\x30\x30\x30\x33\x2C\x34\x36\x30\x38\x30\x30\x2C\x30\x2A\x31\x35\x0D\x0A");
-  usleep(100*1000);
-
-  // set baud rate to 460800
-  pigeon_set_baud(460800);
-  usleep(100*1000);
-
-  // init from ubloxd
-  pigeon_send("\xB5\x62\x06\x00\x14\x00\x03\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x1E\x7F");
-  pigeon_send("\xB5\x62\x06\x3E\x00\x00\x44\xD2");
-  pigeon_send("\xB5\x62\x06\x00\x14\x00\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x19\x35");
-  pigeon_send("\xB5\x62\x06\x00\x14\x00\x01\x00\x00\x00\xC0\x08\x00\x00\x00\x08\x07\x00\x01\x00\x01\x00\x00\x00\x00\x00\xF4\x80");
-  pigeon_send("\xB5\x62\x06\x00\x14\x00\x04\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x1D\x85");
-  pigeon_send("\xB5\x62\x06\x00\x00\x00\x06\x18");
-  pigeon_send("\xB5\x62\x06\x00\x01\x00\x01\x08\x22");
-  pigeon_send("\xB5\x62\x06\x00\x01\x00\x02\x09\x23");
-  pigeon_send("\xB5\x62\x06\x00\x01\x00\x03\x0A\x24");
-  pigeon_send("\xB5\x62\x06\x08\x06\x00\x64\x00\x01\x00\x00\x00\x79\x10");
-  pigeon_send("\xB5\x62\x06\x24\x24\x00\x05\x00\x04\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x5A\x63");
-  pigeon_send("\xB5\x62\x06\x1E\x14\x00\x00\x00\x00\x00\x01\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3C\x37");
-  pigeon_send("\xB5\x62\x06\x24\x00\x00\x2A\x84");
-  pigeon_send("\xB5\x62\x06\x23\x00\x00\x29\x81");
-  pigeon_send("\xB5\x62\x06\x1E\x00\x00\x24\x72");
-  pigeon_send("\xB5\x62\x06\x01\x03\x00\x01\x07\x01\x13\x51");
-  pigeon_send("\xB5\x62\x06\x01\x03\x00\x02\x15\x01\x22\x70");
-  pigeon_send("\xB5\x62\x06\x01\x03\x00\x02\x13\x01\x20\x6C");
-
-  LOGW("panda GPS on");
 }
 
 static void pigeon_publish_raw(PubSocket *publisher, unsigned char *dat, int alen) {
@@ -797,49 +620,6 @@ static void pigeon_publish_raw(PubSocket *publisher, unsigned char *dat, int ale
   auto words = capnp::messageToFlatArray(msg);
   auto bytes = words.asBytes();
   publisher->send((char*)bytes.begin(), bytes.size());
-}
-
-
-void *pigeon_thread(void *crap) {
-  // ubloxRaw = 8042
-  Context * context = Context::create();
-  PubSocket * publisher = PubSocket::create(context, "ubloxRaw");
-  assert(publisher != NULL);
-
-  // run at ~100hz
-  unsigned char dat[0x1000];
-  uint64_t cnt = 0;
-  while (!do_exit) {
-    if (pigeon_needs_init) {
-      pigeon_needs_init = false;
-      pigeon_init();
-    }
-    int alen = 0;
-    while (alen < 0xfc0) {
-      pthread_mutex_lock(&usb_lock);
-      int len = libusb_control_transfer(dev_handle, 0xc0, 0xe0, 1, 0, dat+alen, 0x40, TIMEOUT);
-      if (len < 0) { handle_usb_issue(len, __func__); }
-      pthread_mutex_unlock(&usb_lock);
-      if (len <= 0) break;
-
-      //printf("got %d\n", len);
-      alen += len;
-    }
-    if (alen > 0) {
-      if (dat[0] == (char)0x00){
-        LOGW("received invalid ublox message, resetting panda GPS");
-        pigeon_init();
-      } else {
-        pigeon_publish_raw(publisher, dat, alen);
-      }
-    }
-
-    // 10ms
-    usleep(10*1000);
-    cnt++;
-  }
-
-  return NULL;
 }
 
 int set_realtime_priority(int level) {
@@ -863,14 +643,6 @@ int main() {
   // check the environment
   if (getenv("STARTED")) {
     spoofing_started = true;
-  }
-
-  if (getenv("FAKESEND")) {
-    fake_send = true;
-  }
-
-  if (getenv("BOARDD_LOOPBACK")){
-    loopback_can = true;
   }
 
   // init libusb
