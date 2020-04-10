@@ -112,7 +112,7 @@ def fingerprint(logcan, sendcan, has_relay):
 
 
 def get_car(logcan, sendcan, has_relay=False):
-  candidate = "CLIO_IV"
+  candidate = "Vroum"
 
   if candidate is None:
     candidate = "mock"
