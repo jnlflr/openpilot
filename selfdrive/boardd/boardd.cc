@@ -42,7 +42,7 @@ libusb_device_handle *dev_handle;
 pthread_mutex_t usb_lock;
 
 bool spoofing_started = false;
-cereal::HealthData::HwType hw_type = cereal::HealthData::HwType::WHITEPANDA;
+cereal::HealthData::HwType hw_type = cereal::HealthData::HwType::WHITE_PANDA;
 bool is_pigeon = false;
 
 // must be called before threads or with mutex
