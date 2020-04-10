@@ -653,13 +653,6 @@ ALERTS = [
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
-      "internetConnectivityNeededNoEntry",
-      "openpilot Unavailable",
-      "Please Connect to Internet",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
-
-  Alert(
       "lowMemoryNoEntry",
       "openpilot Unavailable",
       "Low Memory: Reboot Your EON",
@@ -699,13 +692,6 @@ ALERTS = [
       "invalidGiraffeToyotaPermanent",
       "Unsupported Giraffe Configuration",
       "Visit comma.ai/tg",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-
-  Alert(
-      "internetConnectivityNeededPermanent",
-      "Please connect to Internet",
-      "An Update Check Is Required to Engage",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
