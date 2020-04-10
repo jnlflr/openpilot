@@ -33,9 +33,6 @@
 #define RECV_SIZE (0x1000)
 #define TIMEOUT 0
 
-#define HW_TYPE_WHITE_PANDA 1U
-
-
 namespace {
 
 volatile sig_atomic_t do_exit = 0;
@@ -88,8 +85,6 @@ bool usb_connect() {
     printf("panda serial: %.*s\n", serial_sz, serial);
   }
   else { goto fail; }
-
-  hw_type = HW_TYPE_WHITE_PANDA;
 
   return true;
 fail:
