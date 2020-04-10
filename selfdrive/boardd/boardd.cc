@@ -361,6 +361,8 @@ int set_realtime_priority(int level) {
   return sched_setscheduler(getpid(), SCHED_FIFO, &sa);
 }
 
+}
+
 int main() {
   int err;
   LOGW("starting boardd");
@@ -415,19 +417,4 @@ int main() {
 
   libusb_close(dev_handle);
   libusb_exit(ctx);
-}
-
-
-static void pigeon_publish_raw(PubSocket *publisher, unsigned char *dat, int alen) {
-  // create message
-  capnp::MallocMessageBuilder msg;
-  cereal::Event::Builder event = msg.initRoot<cereal::Event>();
-  event.setLogMonoTime(nanos_since_boot());
-  auto ublox_raw = event.initUbloxRaw(alen);
-  memcpy(ublox_raw.begin(), dat, alen);
-
-  // send to ubloxRaw
-  auto words = capnp::messageToFlatArray(msg);
-  auto bytes = words.asBytes();
-  publisher->send((char*)bytes.begin(), bytes.size());
 }
