@@ -33,6 +33,9 @@
 #define RECV_SIZE (0x1000)
 #define TIMEOUT 0
 
+#define HW_TYPE_WHITE_PANDA 1U
+
+
 namespace {
 
 volatile sig_atomic_t do_exit = 0;
@@ -42,7 +45,7 @@ libusb_device_handle *dev_handle;
 pthread_mutex_t usb_lock;
 
 bool spoofing_started = false;
-cereal::HealthData::HwType hw_type = cereal::HealthData::HwType::UNKNOWN;
+cereal::HealthData::HwType hw_type = cereal::HealthData::HwType::whitePanda;
 bool is_pigeon = false;
 
 // must be called before threads or with mutex
@@ -86,7 +89,7 @@ bool usb_connect() {
   }
   else { goto fail; }
 
-  hw_type = whitePanda;
+  hw_type = HW_TYPE_WHITE_PANDA;
 
   return true;
 fail:
@@ -216,7 +219,7 @@ void can_health(PubSocket *publisher) {
   healthData.setHwType(hw_type);
   healthData.setUsbPowerMode(cereal::HealthData::UsbPowerMode(health.usb_power_mode));
   healthData.setSafetyModel(cereal::CarParams::SafetyModel(health.safety_model));
-  healthData.setFanSpeedRpm(fan_speed_rpm);
+  healthData.setFanSpeedRpm(0);
   healthData.setFaultStatus(cereal::HealthData::FaultStatus(health.fault_status));
   healthData.setPowerSaveEnabled((bool)(health.power_save_enabled));
 
