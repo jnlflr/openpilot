@@ -121,6 +121,8 @@ class Planner():
     lead_1 = sm['radarState'].leadOne
     lead_2 = sm['radarState'].leadTwo
 
+    #cloudlog.info("lead_1 %s", lead_1)
+
     enabled = (long_control_state == LongCtrlState.pid) or (long_control_state == LongCtrlState.stopping)
 
     if len(sm['model'].path.poly):

@@ -163,6 +163,9 @@ class PathPlanner():
                         list(self.LP.l_poly), list(self.LP.r_poly), list(self.LP.d_poly),
                         self.LP.l_prob, self.LP.r_prob, curvature_factor, v_ego_mpc, self.LP.lane_width)
 
+    for x in len(list(self.LP.l_poly)):
+      cloudlog.info("l_poly %d", x)
+
     # reset to current steer angle if not active or overriding
     if active:
       delta_desired = self.mpc_solution[0].delta[1]

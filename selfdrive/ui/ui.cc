@@ -853,7 +853,8 @@ static void update_all_track_data(UIState *s) {
   // Draw vision path
   update_track_data(s, false, &s->track_vertices[0]);
 
-  if (scene->engaged) {
+  // if (scene->engaged) 
+  if (true) {
     // Draw MPC path when engaged
     update_track_data(s, true, &s->track_vertices[1]);
   }
