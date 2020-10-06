@@ -400,6 +400,9 @@ def manager_thread():
     running_list = ["%s%s\u001b[0m" % ("\u001b[32m" if running[p].is_alive() else "\u001b[31m", p) for p in running]
     cloudlog.debug(' '.join(running_list))
 
+    cloudlog.info("essai print info")
+    cloudlog.debug("essai print debug")
+
     # Exit main loop when uninstall is needed
     if params.get("DoUninstall", encoding='utf8') == "1":
       break
