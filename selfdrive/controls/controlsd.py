@@ -553,8 +553,11 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     start_time = sec_since_boot()
     prof.checkpoint("Ratekeeper", ignore=True)
 
-    cloudlog.info("car name %s" % CP.carName)
-    cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
+    #cloudlog.info("car name %s" % CP.carName)
+    #cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
+    cloudlog.info("info controlsd")
+    cloudlog.debug("debug controlsd")
+
 
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter = data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params)

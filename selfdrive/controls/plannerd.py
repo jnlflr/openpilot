@@ -39,6 +39,8 @@ def plannerd_thread(sm=None, pm=None):
 
   while True:
     sm.update()
+    cloudlog.info("info plannerd")
+    cloudlog.debug("debug plannerd")
 
     if sm.updated['model']:
       PP.update(sm, pm, CP, VM)
