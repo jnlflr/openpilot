@@ -555,8 +555,6 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
     cloudlog.info("car name %s" % CP.carName)
     cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
-    cloudlog.info("essai print info")
-    cloudlog.debug("essai print debug")
 
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter = data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params)
@@ -613,7 +611,10 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
 
 def main(sm=None, pm=None, logcan=None):
+  cloudlog.info("essai print info")
+  cloudlog.debug("essai print debug")
   controlsd_thread(sm, pm, logcan)
+
 
 
 if __name__ == "__main__":
