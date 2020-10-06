@@ -501,8 +501,8 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   if read_only:
     CP.safetyModel = car.CarParams.SafetyModel.noOutput
 
-  cloudlog.info("car name %s", CP.carName)
-  cloudlog.info("lane width %d", sm['pathPlan'].laneWidth)
+  cloudlog.debug("car name %s", CP.carName)
+  cloudlog.debug("lane width %d", sm['pathPlan'].laneWidth)
 
   # Write CarParams for radard and boardd safety mode
   params.put("CarParams", CP.to_bytes())
