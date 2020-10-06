@@ -501,12 +501,6 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   if read_only:
     CP.safetyModel = car.CarParams.SafetyModel.noOutput
 
-  cloudlog.info("car name %s" % CP.carName)
-  cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
-  cloudlog.info("essai print info")
-  cloudlog.debug("essai print debug")
-
-
   # Write CarParams for radard and boardd safety mode
   params.put("CarParams", CP.to_bytes())
   params.put("LongitudinalControl", "1" if CP.openpilotLongitudinalControl else "0")
@@ -558,6 +552,11 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   while True:
     start_time = sec_since_boot()
     prof.checkpoint("Ratekeeper", ignore=True)
+
+    cloudlog.info("car name %s" % CP.carName)
+    cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
+    cloudlog.info("essai print info")
+    cloudlog.debug("essai print debug")
 
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter = data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params)
