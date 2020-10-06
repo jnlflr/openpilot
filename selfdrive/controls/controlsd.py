@@ -5,6 +5,7 @@ import capnp
 from cereal import car, log
 from common.numpy_fast import clip
 from common.realtime import sec_since_boot, set_realtime_priority, Ratekeeper, DT_CTRL
+from selfdrive.swaglog import cloudlog
 from common.profiler import Profiler
 from common.params import Params, put_nonblocking
 import cereal.messaging as messaging
@@ -499,6 +500,9 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   read_only = not car_recognized or not controller_available or CP.dashcamOnly or community_feature_disallowed
   if read_only:
     CP.safetyModel = car.CarParams.SafetyModel.noOutput
+
+  cloudlog.info("car name %s", CP.carName)
+  cloudlog.info("lane width %d", sm['pathPlan'].laneWidth)
 
   # Write CarParams for radard and boardd safety mode
   params.put("CarParams", CP.to_bytes())
