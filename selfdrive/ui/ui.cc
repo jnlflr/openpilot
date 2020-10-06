@@ -1072,7 +1072,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   char maxspeed_str[32];
   float maxspeed = s->scene.v_cruise;
   int maxspeed_calc = maxspeed * 0.6225 + 0.5;
-  float speedlimit = s->scene.speedlimit;
+  float speedlimit = 60;
   int speedlim_calc = speedlimit * 2.2369363 + 0.5;
   int speed_lim_off = s->speed_lim_off * 2.2369363 + 0.5;
   if (s->is_metric) {
@@ -1082,7 +1082,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   }
 
   bool is_cruise_set = (maxspeed != 0 && maxspeed != SET_SPEED_NA);
-  bool is_speedlim_valid = s->scene.speedlimit_valid;
+  bool is_speedlim_valid = true;
   bool is_set_over_limit = is_speedlim_valid && s->scene.engaged &&
                        is_cruise_set && maxspeed_calc > (speedlim_calc + speed_lim_off);
 
@@ -1157,13 +1157,13 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   int ui_viz_rw = scene->ui_viz_rw;
 
   char speedlim_str[32];
-  float speedlimit = s->scene.speedlimit;
+  float speedlimit = 60;
   int speedlim_calc = speedlimit * 2.2369363 + 0.5;
   if (s->is_metric) {
     speedlim_calc = speedlimit * 3.6 + 0.5;
   }
 
-  bool is_speedlim_valid = s->scene.speedlimit_valid;
+  bool is_speedlim_valid = true;
   float hysteresis_offset = 0.5;
   if (s->is_ego_over_limit) {
     hysteresis_offset = 0.0;
