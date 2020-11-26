@@ -88,8 +88,7 @@ bool usb_connect() {
 
   return true;
 fail:
-  return true; // grosse modif, normalement false !
-  //return false;
+  return false;
 }
 
 void usb_retry_connect() {
