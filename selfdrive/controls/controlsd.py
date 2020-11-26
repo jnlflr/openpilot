@@ -50,12 +50,14 @@ def add_lane_change_event(events, path_plan):
 
 def isActive(state):
   """Check if the actuators are enabled"""
-  return state in [State.enabled, State.softDisabling]
+  return True
+  #return state in [State.enabled, State.softDisabling]
 
 
 def isEnabled(state):
   """Check if openpilot is engaged"""
-  return (isActive(state) or state == State.preEnabled)
+  return True
+  #return (isActive(state) or state == State.preEnabled)
 
 def events_to_bytes(events):
   # optimization when comparing capnp structs: str() or tree traverse are much slower
