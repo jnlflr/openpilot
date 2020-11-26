@@ -368,8 +368,8 @@ def manager_thread():
   pm_apply_packages('enable')
   start_frame()
 
-  #if os.getenv("NOBOARD") is None:
-  #  start_managed_process("pandad")
+  if os.getenv("NOBOARD") is None:
+    start_managed_process("pandad")
 
   logger_dead = False
 
