@@ -110,14 +110,15 @@ def fingerprint(logcan, sendcan, has_relay):
   cloudlog.warning("fingerprinted %s", car_fingerprint)
   return car_fingerprint, finger, vin
 
-
 def get_car(logcan, sendcan, has_relay=False):
-  candidate = CAR.VROUM
+
+  candidate, fingerprints, vin = fingerprint(logcan, sendcan, has_relay)
 
   if candidate is None:
+    cloudlog.warning("car doesn't match any fingerprints: %r", fingerprints)
     candidate = "mock"
 
   CarInterface, CarController = interfaces[candidate]
-  car_params = CarInterface.get_params(candidate, has_relay)
+  car_params = CarInterface.get_params(candidate, fingerprints, vin, has_relay)
 
   return CarInterface(car_params, CarController), car_params

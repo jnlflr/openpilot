@@ -145,7 +145,7 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kiBP = [0., 35.]
       ret.longitudinalTuning.kiV = [0.18, 0.12]
     
-    elif candidate in [CAR.CIVIC, CAR.VROUM]:
+    elif candidate in [CAR.CIVIC, CAR.VROUM, CAR.ESSAI]:
       stop_and_go = False
       ret.mass =  1215 + STD_CARGO_KG
       ret.wheelbase = 2.589
