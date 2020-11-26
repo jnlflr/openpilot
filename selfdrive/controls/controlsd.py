@@ -51,12 +51,14 @@ def add_lane_change_event(events, path_plan):
 
 def isActive(state):
   """Check if the actuators are enabled"""
-  return state in [State.enabled, State.softDisabling]
+  #return state in [State.enabled, State.softDisabling]
+  return True
 
 
 def isEnabled(state):
   """Check if openpilot is engaged"""
-  return (isActive(state) or state == State.preEnabled)
+  #return (isActive(state) or state == State.preEnabled)
+  return True
 
 def events_to_bytes(events):
   # optimization when comparing capnp structs: str() or tree traverse are much slower
@@ -614,8 +616,6 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
 
 def main(sm=None, pm=None, logcan=None):
-  cloudlog.info("essai print info")
-  cloudlog.debug("essai print debug")
   controlsd_thread(sm, pm, logcan)
 
 
