@@ -409,7 +409,7 @@ int main() {
   err = pthread_join(can_health_thread_handle, NULL);
   assert(err == 0);
 
-  //while (!do_exit) usleep(1000);
+  while (!do_exit) usleep(1000);
 
   // destruct libusb
 
