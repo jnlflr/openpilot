@@ -46,7 +46,7 @@ def get_can_signals(CP):
 
       ("STEER_ANGLE", "STEERING_SENSORS", 0),
       ("STEER_ANGLE_RATE", "STEERING_SENSORS", 0),
-      ("STEER_TORQUE_SENSOR", "EPS", 0),
+      ("STEER_TORQUE", "STEERING_CONTROL", 0),
 
       ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
       ("BRAKE_PRESSED", "POWERTRAIN_DATA", 0),
@@ -69,8 +69,7 @@ def get_can_signals(CP):
       ("REAR_SPEEDS", 25),
       ("SPEEDS", 25),
       ("STEERING_SENSORS", 100),
-      ("EPS", 100),
-      ("ABS", 25),
+      ("STEERING_CONTROL", 100),
       ("MACCHINA", 100),
   ]
 
