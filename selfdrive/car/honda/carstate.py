@@ -222,6 +222,7 @@ class CarState():
     self.car_gas = self.pedal_gas
 
     self.steer_torque_driver = cp.vl["MACCHINA"]['STEER_TORQUE_DRIVER']
+    self.steer_torque_motor = cp.vl["MACCHINA"]['STEER_TORQUE_DRIVER']
     self.steer_override = abs(self.steer_torque_driver) > STEER_THRESHOLD[self.CP.carFingerprint]
 
     # ATTENTION a changer:
