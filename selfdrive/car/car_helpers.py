@@ -102,6 +102,8 @@ def fingerprint(logcan, sendcan, has_relay):
         if frame > frame_fingerprint:
           # fingerprint done
           car_fingerprint = candidate_cars[b][0]
+    
+    car_fingerprint = "HONDA ESSAI"
 
     # bail if no cars left or we've been waiting for more than 2s
     failed = all(len(cc) == 0 for cc in candidate_cars.values()) or frame > 200
