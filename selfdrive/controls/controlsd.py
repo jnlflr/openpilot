@@ -472,7 +472,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   openpilot_enabled_toggle = params.get("OpenpilotEnabledToggle", encoding='utf8') == "1"
   community_feature_toggle = params.get("CommunityFeaturesToggle", encoding='utf8') == "1"
 
-  passive = passive or not openpilot_enabled_toggle
+  passive = False #passive or not openpilot_enabled_toggle
 
   # Pub/Sub Sockets
   if pm is None:
@@ -556,7 +556,6 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     prof.checkpoint("Ratekeeper", ignore=True)
 
     cloudlog.info("car name %s" % CP.carName)
-    cloudlog.info("car speed %s" % CS.vEgo)
     #cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
     cloudlog.info("info controlsd")
     cloudlog.debug("debug controlsd")
