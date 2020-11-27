@@ -555,7 +555,8 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     start_time = sec_since_boot()
     prof.checkpoint("Ratekeeper", ignore=True)
 
-    #cloudlog.info("car name %s" % CP.carName)
+    cloudlog.info("car name %s" % CP.carName)
+    cloudlog.info("car speed %s" % CS.vEgo)
     #cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
     cloudlog.info("info controlsd")
     cloudlog.debug("debug controlsd")
