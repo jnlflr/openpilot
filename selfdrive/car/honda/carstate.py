@@ -39,7 +39,7 @@ def calc_cruise_offset(offset, speed):
 def get_can_signals(CP):
 # this function generates lists for signal, messages and initial values
   signals = [
-      ("SPEEDS", "SPEED1", 0),
+      ("SPEED1", "SPEEDS", 0),
       ("WHEEL_SPEED_FT", "FRONT_SPEEDS", 0),
       ("WHEEL_SPEED_RL", "REAR_SPEEDS", 0),
       ("WHEEL_SPEED_RR", "REAR_SPEEDS", 0),
@@ -65,7 +65,9 @@ def get_can_signals(CP):
 
   checks = [
       ("POWERTRAIN_DATA", 100),
-      ("WHEEL_SPEEDS", 25),
+      ("FRONT_SPEEDS", 25),
+      ("REAR_SPEEDS", 25),
+      ("SPEEDS", 25),
       ("STEERING_SENSORS", 100),
       ("EPS", 100),
       ("ABS", 25),
@@ -143,9 +145,9 @@ class CarState():
     # ******************* parse out can *******************
     # 2 = temporary; 3 = TBD; 4 = temporary, hit a bump; 5 = (permanent); 6 = temporary; 7 = (permanent)
     # TODO: Use values from DBC to parse this field
-    self.steer_error = cp.vl["MACCHINA"]['STEER_STATUS'] not in [0, 2, 3, 4, 6]
-    self.steer_not_allowed = cp.vl["MACCHINA"]['STEER_STATUS']  not in [0, 4]  # 4 can be caused by bump OR steering nudge from driver
-    self.steer_warning = cp.vl["MACCHINA"]['STEER_STATUS'] not in [0, 3, 4] # 3 is low speed lockout, not worth a warning
+    self.steer_error = False #cp.vl["MACCHINA"]['STEER_STATUS'] not in [0, 2, 3, 4, 6]
+    self.steer_not_allowed = False #cp.vl["MACCHINA"]['STEER_STATUS']  not in [0, 4]  # 4 can be caused by bump OR steering nudge from driver
+    self.steer_warning = False #cp.vl["MACCHINA"]['STEER_STATUS'] not in [0, 3, 4] # 3 is low speed lockout, not worth a warning
     if self.CP.radarOffCan:
       self.brake_error = 0
     else:
