@@ -107,6 +107,7 @@ CANParser::CANParser(int abus, const std::string& dbc_name,
   for (const auto& op : options) {
     MessageState state = {
       .address = op.address,
+      fprintf(stderr, "op.address: 0x%X\n", op.address);
       // .check_frequency = op.check_frequency,
     };
 
@@ -118,6 +119,7 @@ CANParser::CANParser(int abus, const std::string& dbc_name,
 
     const Msg* msg = NULL;
     for (int i=0; i<dbc->num_msgs; i++) {
+      fprintf(stderr, "dbc msgs: 0x%X\n", dbc->msgs[i].address);
       if (dbc->msgs[i].address == op.address) {
         msg = &dbc->msgs[i];
         break;
