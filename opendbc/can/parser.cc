@@ -107,10 +107,9 @@ CANParser::CANParser(int abus, const std::string& dbc_name,
   for (const auto& op : options) {
     MessageState state = {
       .address = op.address,
-      fprintf(stderr, "op.address: 0x%X\n", op.address);
       // .check_frequency = op.check_frequency,
     };
-
+    fprintf(stderr, "op.address: 0x%X\n", op.address);
     // msg is not valid if a message isn't received for 10 consecutive steps
     if (op.check_frequency > 0) {
       state.check_threshold = (1000000000ULL / op.check_frequency) * 10;
