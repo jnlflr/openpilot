@@ -101,7 +101,6 @@ class CarState():
     self.CP = CP
     self.can_define = CANDefine(DBC[CP.carFingerprint]['pt'])
     self.shifter_values = self.can_define.dv["MACCHINA"]["GEAR_SHIFTER"]
-    self.lkMode = True
     
     self.user_gas, self.user_gas_pressed = 0., 0
     self.brake_switch_prev = 0

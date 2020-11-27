@@ -59,11 +59,11 @@ def create_left_lane(packer, apply_brake, pump_on, pcm_override, pcm_cancel_cmd,
   return packer.make_can_msg("BRAKE_COMMAND", bus, values, idx)
 
 
-def create_steering_control(packer, apply_steer, angle_des, lkas_active, enabled, lkMode, car_fingerprint, idx):
+def create_steering_control(packer, apply_steer, angle_des, lkas_active, enabled, car_fingerprint, idx):
   values = {
     "STEER_TORQUE": apply_steer,
     "LKAS_ACTIVE": lkas_active,
-	  "LK_MODE": lkMode,
+	  "LK_MODE": False,
 	  "ST_NOT_ALL": 0x01,
 	  "ANGLE_DES": angle_des,
   }
