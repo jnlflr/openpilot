@@ -375,9 +375,9 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends = CI.apply(CC)
     idx = sm.frame % 4
 
-    can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].lPoly[0],sm['pathPlan'].lPoly[1],sm['pathPlan'].lPoly[2],sm['pathPlan'].lPoly[3]))
-    can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].rPoly))
-    can_sends.append(hondacan.create_d_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].dPoly))
+    #can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].lPoly))
+    #can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].rPoly))
+    #can_sends.append(hondacan.create_d_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].dPoly))
 
     can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
 

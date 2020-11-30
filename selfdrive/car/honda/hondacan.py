@@ -17,12 +17,12 @@ def create_brake_command(packer, apply_brake, idx, car_fingerprint):
   bus = 0
   return packer.make_can_msg("GAS_COMMAND", bus, values, idx)
 
-def create_left_lane(packer, idx, car_fingerprint,l_poly0,l_poly1,l_poly2,l_poly3):
+def create_left_lane(packer, idx, car_fingerprint,l_poly):
   values = {
-    "C0_L": l_poly0,
-    "C1_L": l_poly1,
-    "C2_L": l_poly2,
-    "C3_L": l_poly3,
+    "C0_L": l_poly[0],
+    "C1_L": l_poly[1],
+    "C2_L": l_poly[2],
+    "C3_L": l_poly[3],
   }
   bus = 0
   return packer.make_can_msg("LEFT_LANE", bus, values, idx)
