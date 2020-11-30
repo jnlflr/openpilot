@@ -64,7 +64,7 @@ def create_lane_prob(packer, idx, car_fingerprint,l_prob,r_prob,lane_width):
     "LANE_WIDTH": lane_width,
   }
   bus = 0
-  return packer.make_can_msg("LANE_PROB", bus, values, idx)
+  return packer.make_can_msg("PROB", bus, values, idx)
 
 def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,stiffness,sR,curvature):
   values = {

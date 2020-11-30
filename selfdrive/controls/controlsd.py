@@ -590,27 +590,27 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
     # Create alerts
     if not sm.all_alive_and_valid():
-      events.append(create_event('commIssue', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+      events.append(create_event('commIssue', [ET.WARNING]))
     if not sm['pathPlan'].mpcSolutionValid:
-      events.append(create_event('plannerError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+      events.append(create_event('plannerError', [ET.WARNING]))
     if not sm['pathPlan'].sensorValid:
-      events.append(create_event('sensorDataInvalid', [ET.NO_ENTRY, ET.PERMANENT]))
+      events.append(create_event('sensorDataInvalid', [ET.WARNING]))
     if not sm['pathPlan'].paramsValid:
       events.append(create_event('vehicleModelInvalid', [ET.WARNING]))
     if not sm['pathPlan'].posenetValid:
-      events.append(create_event('posenetInvalid', [ET.NO_ENTRY, ET.WARNING]))
+      events.append(create_event('posenetInvalid', [ET.WARNING]))
     if not sm['plan'].radarValid:
-      events.append(create_event('radarFault', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+      events.append(create_event('radarFault', [ET.WARNING]))
     if sm['plan'].radarCanError:
-      events.append(create_event('radarCanError', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+      events.append(create_event('radarCanError', [ET.WARNING]))
     if not CS.canValid:
-      events.append(create_event('canError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+      events.append(create_event('canError', [ET.WARNING]))
     if not sounds_available:
-      events.append(create_event('soundsUnavailable', [ET.NO_ENTRY, ET.PERMANENT]))
+      events.append(create_event('soundsUnavailable', [ET.WARNING]))
     if internet_needed:
-      events.append(create_event('internetConnectivityNeeded', [ET.NO_ENTRY, ET.PERMANENT]))
+      events.append(create_event('internetConnectivityNeeded', [ET.WARNING]))
     if community_feature_disallowed:
-      events.append(create_event('communityFeatureDisallowed', [ET.PERMANENT]))
+      events.append(create_event('communityFeatureDisallowed', [ET.WARNING]))
 
     # Only allow engagement with brake pressed when stopped behind another stopped car
     if CS.brakePressed and sm['plan'].vTargetFuture >= STARTING_TARGET_SPEED and not CP.radarOffCan and CS.vEgo < 0.3:
