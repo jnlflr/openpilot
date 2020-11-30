@@ -379,7 +379,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     # send car controls over can
     can_sends = CI.apply(CC)
     idx = sm.frame % 4
-    cloudlog.debug("l_poly %d" % int(sm['pathPlan'].lPoly[3]*100))
+    lpoly3 = int(100 * sm['pathPlan'].lPoly[3])
+    cloudlog.debug("l_poly %d" % lpoly3)
     """
     z = [10000000,1000000,100000,10000]
     b = [30000,30000,30000,30000]
