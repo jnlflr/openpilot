@@ -55,13 +55,13 @@ def add_lane_change_event(events, path_plan):
 def isActive(state):
   """Check if the actuators are enabled"""
   #return state in [State.enabled, State.softDisabling]
-  return True
+  return State.enabled
 
 
 def isEnabled(state):
   """Check if openpilot is engaged"""
   #return (isActive(state) or state == State.preEnabled)
-  return True
+  return isActive(state)
 
 def events_to_bytes(events):
   # optimization when comparing capnp structs: str() or tree traverse are much slower
@@ -137,7 +137,7 @@ def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, pa
   if not enabled:
     mismatch_counter = 0
 
-  controls_allowed = sm['health'].controlsAllowed
+  controls_allowed = True
   if not controls_allowed and enabled:
     mismatch_counter += 1
   if mismatch_counter >= 200:
@@ -571,9 +571,9 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     start_time = sec_since_boot()
     prof.checkpoint("Ratekeeper", ignore=True)
 
-    cloudlog.info("car name %s" % CP.carName)
-    cloudlog.info("passive ? %s" % passive)
-    #cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
+    #cloudlog.info("car name %s" % CP.carName)
+    #cloudlog.info("passive ? %s" % passive)
+    cloudlog.debug("lane width %d" % sm['pathPlan'].laneWidth)
     cloudlog.info("info controlsd")
     cloudlog.debug("debug controlsd")
 
