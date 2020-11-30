@@ -588,7 +588,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter = data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params)
     prof.checkpoint("Sample")
-
+    """
     # Create alerts
     if not sm.all_alive_and_valid():
       events.append(create_event('commIssue', [ET.WARNING]))
@@ -616,6 +616,8 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     # Only allow engagement with brake pressed when stopped behind another stopped car
     if CS.brakePressed and sm['plan'].vTargetFuture >= STARTING_TARGET_SPEED and not CP.radarOffCan and CS.vEgo < 0.3:
       events.append(create_event('noTarget', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+    
+    """
 
     if not read_only:
       # update control state
