@@ -27,6 +27,7 @@ from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.controls.lib.driver_monitor import DriverStatus, MAX_TERMINAL_ALERTS, MAX_TERMINAL_DURATION
 from selfdrive.controls.lib.planner import LON_MPC_STEP
 from selfdrive.controls.lib.gps_helpers import is_rhd_region
+from selfdrive.car.honda import hondacan
 from selfdrive.locationd.calibration_helpers import Calibration, Filter
 
 LANE_DEPARTURE_THRESHOLD = 0.1
@@ -368,6 +369,17 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
   if not read_only:
     # send car controls over can
     can_sends = CI.apply(CC)
+    idx = sm.frame % 4
+
+    can_sends.append(hondacan.create_left_lane(CC.packer, idx, CS.CP.carFingerprint,sm['pathPlan'].lPoly))
+    can_sends.append(hondacan.create_right_lane(CC.packer, idx, CS.CP.carFingerprint,sm['pathPlan'].rPoly))
+    can_sends.append(hondacan.create_d_lane(CC.packer, idx, CS.CP.carFingerprint,sm['pathPlan'].dPoly))
+
+    can_sends.append(hondacan.create_lane_prob(CC.packer, idx, CS.CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
+
+    if sm.updated['liveParameters']:
+      can_sends.append(hondacan.create_params(CC.packer, idx, CS.CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio))
+    
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 
   force_decel = driver_status.awareness < 0.
@@ -480,7 +492,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
   if sm is None:
     sm = messaging.SubMaster(['thermal', 'health', 'liveCalibration', 'driverMonitoring', 'plan', 'pathPlan', \
-                              'model', 'gpsLocation'], ignore_alive=['gpsLocation'])
+                              'model', 'gpsLocation','liveParameters'], ignore_alive=['gpsLocation'])
 
 
   if can_sock is None:
