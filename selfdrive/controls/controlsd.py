@@ -306,8 +306,8 @@ def state_control(frame, rcv_frame, plan, path_plan, CS, CP, state, events, v_cr
     left_deviation = actuators.steer > 0 and path_plan.dPoly[3] > 0.1
     right_deviation = actuators.steer < 0 and path_plan.dPoly[3] < -0.1
 
-    if left_deviation or right_deviation:
-      AM.add(frame, "steerSaturated", enabled)
+    #if left_deviation or right_deviation:
+    #  AM.add(frame, "steerSaturated", enabled)
 
   # Parse permanent warnings to display constantly
   for e in get_events(events, [ET.PERMANENT]):
@@ -380,7 +380,19 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends = CI.apply(CC)
     idx = sm.frame % 4
 
-    #can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].lPoly))
+    z = [10000000,1000000,100000,10000]
+    b = [30000,30000,30000,30000]
+    lPoly_can = [0,0,0,0]
+    rPoly_can = [0,0,0,0]
+    dPoly_can = [0,0,0,0]
+
+
+    for x in range(0,3):
+      lPoly_can[x] = z[x] * sm['pathPlan'].lPoly[x] + b[x]
+      rPoly_can[x] = z[x] * sm['pathPlan'].rPoly[x] + b[x]
+      dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
+
+    can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
     #can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].rPoly))
     #can_sends.append(hondacan.create_d_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].dPoly))
 
