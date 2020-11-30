@@ -380,6 +380,9 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends = CI.apply(CC)
     idx = sm.frame % 4
 
+    for x in md.leftLane.poly:
+      cloudlog.debug("poly %d" % x)
+
     """
     z = [10000000,1000000,100000,10000]
     b = [30000,30000,30000,30000]
@@ -598,8 +601,6 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     cloudlog.info("mpc sol valid ? %s" % sm['pathPlan'].mpcSolutionValid)
     cloudlog.info("info controlsd")
     cloudlog.debug("debug controlsd")
-    if ((sm['pathPlan'].lPoly[3] < (1.08 - CAMERA_OFFSET))):
-      cloudlog.info("test passed")
 
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter = data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params)
