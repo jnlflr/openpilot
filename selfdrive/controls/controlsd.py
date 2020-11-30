@@ -89,7 +89,7 @@ def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, pa
 
   # Check for CAN timeout
   if not can_strs:
-    events.append(create_event('canError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+    events.append(create_event('canError', [ET.WARNING]))
 
   overtemp = sm['thermal'].thermalStatus >= ThermalStatus.red
   free_space = sm['thermal'].freeSpace < 0.07  # under 7% of space free no enable allowed
@@ -98,13 +98,13 @@ def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, pa
 
   # Create events for battery, temperature and disk space
   if low_battery:
-    events.append(create_event('lowBattery', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+    events.append(create_event('lowBattery', [ET.WARNING]))
   if overtemp:
-    events.append(create_event('overheat', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+    events.append(create_event('overheat', [ET.WARNING]))
   if free_space:
     events.append(create_event('outOfSpace', [ET.NO_ENTRY]))
   if mem_low:
-    events.append(create_event('lowMemory', [ET.NO_ENTRY, ET.SOFT_DISABLE, ET.PERMANENT]))
+    events.append(create_event('lowMemory', [ET.WARNING]))
 
   if CS.stockAeb:
     events.append(create_event('stockAeb', []))
@@ -123,9 +123,9 @@ def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, pa
   cal_rpy = [0,0,0]
   if cal_status != Calibration.CALIBRATED:
     if cal_status == Calibration.UNCALIBRATED:
-      events.append(create_event('calibrationIncomplete', [ET.NO_ENTRY, ET.SOFT_DISABLE, ET.PERMANENT]))
+      events.append(create_event('calibrationIncomplete', [ET.WARNING]))
     else:
-      events.append(create_event('calibrationInvalid', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+      events.append(create_event('calibrationInvalid', [ET.WARNING]))
   else:
     rpy = sm['liveCalibration'].rpyCalib
     if len(rpy) == 3:
@@ -142,7 +142,7 @@ def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, pa
   if not controls_allowed and enabled:
     mismatch_counter += 1
   if mismatch_counter >= 200:
-    events.append(create_event('controlsMismatch', [ET.IMMEDIATE_DISABLE]))
+    events.append(create_event('controlsMismatch', [ET.WARNING]))
 
   # Driver monitoring
   if sm.updated['model']:
@@ -152,7 +152,7 @@ def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, pa
     driver_status.get_pose(sm['driverMonitoring'], cal_rpy, CS.vEgo, enabled)
 
   if driver_status.terminal_alert_cnt >= MAX_TERMINAL_ALERTS or driver_status.terminal_time >= MAX_TERMINAL_DURATION:
-    events.append(create_event("tooDistracted", [ET.NO_ENTRY]))
+    events.append(create_event("tooDistracted", [ET.WARNING]))
 
   return CS, events, cal_perc, mismatch_counter
 
