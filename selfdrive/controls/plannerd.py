@@ -39,7 +39,6 @@ def plannerd_thread(sm=None, pm=None):
 
   while True:
     sm.update()
-    #cloudlog.debug("lane width %d" % PP.LP.l_poly[3])
     cloudlog.info("info plannerd")
     cloudlog.debug("debug plannerd")
 
