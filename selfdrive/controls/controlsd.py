@@ -593,8 +593,8 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
       events.append(create_event('commIssue', [ET.WARNING]))
     if not sm['pathPlan'].mpcSolutionValid:
       events.append(create_event('plannerError', [ET.WARNING]))
-    if not sm['pathPlan'].sensorValid:
-      events.append(create_event('sensorDataInvalid', [ET.WARNING]))
+    #if not sm['pathPlan'].sensorValid:
+    #  events.append(create_event('sensorDataInvalid', [ET.WARNING]))
     if not sm['pathPlan'].paramsValid:
       events.append(create_event('vehicleModelInvalid', [ET.WARNING]))
     if not sm['pathPlan'].posenetValid:
