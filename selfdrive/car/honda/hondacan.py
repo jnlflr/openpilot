@@ -95,7 +95,6 @@ def create_steering_control(packer, apply_steer, angle_des, lkas_active, enabled
 	  "ST_NOT_ALL": 0x01,
 	  "ANGLE_DES": angle_des,
   }
-  # Set bus 2 for accord and new crv.
   bus = 0
   return packer.make_can_msg("STEERING_CONTROL", bus, values, idx)
 
