@@ -75,7 +75,7 @@ def events_to_bytes(events):
 
 def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params):
   """Receive data from sockets and create events for battery, temperature and disk space"""
-  cloudlog.info("in controlsd data_sample")
+  #cloudlog.info("in controlsd data_sample")
 
   # Update carstate from CAN and create events
   can_strs = messaging.drain_sock_raw(can_sock, wait_for_one=True)
@@ -89,7 +89,8 @@ def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, pa
 
   # Check for CAN timeout
   if not can_strs:
-    events.append(create_event('canError', [ET.WARNING]))
+    cloudlog.info("canError")
+    #events.append(create_event('canError', [ET.WARNING]))
 
   overtemp = sm['thermal'].thermalStatus >= ThermalStatus.red
   free_space = sm['thermal'].freeSpace < 0.07  # under 7% of space free no enable allowed
@@ -603,8 +604,8 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
       events.append(create_event('radarFault', [ET.WARNING]))
     if sm['plan'].radarCanError:
       events.append(create_event('radarCanError', [ET.WARNING]))
-    if not CS.canValid:
-      events.append(create_event('canError', [ET.WARNING]))
+    #if not CS.canValid:
+    #  events.append(create_event('canError', [ET.WARNING]))
     if not sounds_available:
       events.append(create_event('soundsUnavailable', [ET.WARNING]))
     if internet_needed:
