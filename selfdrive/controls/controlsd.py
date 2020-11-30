@@ -325,7 +325,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
   """Send actuators and hud commands to the car, send controlsstate and MPC logging"""
 
   CC = car.CarControl.new_message()
-  CC.enabled = isEnabled(state)
+  CC.enabled = True
   CC.actuators = actuators
 
   CC.cruiseControl.override = True
