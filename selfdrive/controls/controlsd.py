@@ -573,7 +573,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
     #cloudlog.info("car name %s" % CP.carName)
     #cloudlog.info("passive ? %s" % passive)
-    cloudlog.debug("lane width %d" % sm['pathPlan']..lPoly[3])
+    cloudlog.debug("lane width %d" % sm['pathPlan'].lPoly[3])
     cloudlog.info("info controlsd")
     cloudlog.debug("debug controlsd")
 
