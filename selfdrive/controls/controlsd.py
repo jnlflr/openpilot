@@ -55,7 +55,7 @@ def add_lane_change_event(events, path_plan):
 def isActive(state):
   """Check if the actuators are enabled"""
   #return state in [State.enabled, State.softDisabling]
-  return State.enabled
+  return True
 
 
 def isEnabled(state):
@@ -576,6 +576,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     #cloudlog.info("passive ? %s" % passive)
     #for x in sm['pathPlan'].lPoly:
     #  cloudlog.debug("lane width %d" % x)
+    cloudlog.info("mpc sol valid ? %s" % sm['pathPlan'].mpcSolutionValid)
     cloudlog.info("info controlsd")
     cloudlog.debug("debug controlsd")
 
