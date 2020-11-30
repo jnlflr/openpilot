@@ -382,7 +382,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
 
     if sm.updated['liveParameters']:
-      can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio))
+      can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio,VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)))
     
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 
