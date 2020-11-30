@@ -593,12 +593,13 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     #cloudlog.info("passive ? %s" % passive)
     #for x in sm['pathPlan'].lPoly:
     #  cloudlog.debug("lane width %d" % x)
-    lpoly3 = int(100.0 * sm['pathPlan'].lPoly[2])
-    cloudlog.debug("l_poly %d" % lpoly3)
+    #lpoly3 = int(100.0 * sm['pathPlan'].lPoly[2])
+    #cloudlog.debug("l_poly %d" % lpoly3)
     cloudlog.info("mpc sol valid ? %s" % sm['pathPlan'].mpcSolutionValid)
     cloudlog.info("info controlsd")
     cloudlog.debug("debug controlsd")
-
+    if ((sm['pathPlan'].lPoly[3] < (1.08 - CAMERA_OFFSET))):
+      cloudlog.info("test passed")
 
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter = data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params)
