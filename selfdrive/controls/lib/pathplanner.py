@@ -207,7 +207,7 @@ class PathPlanner():
     plan_send.pathPlan.rPoly = [float(x) for x in self.LP.r_poly]
     plan_send.pathPlan.rProb = float(self.LP.r_prob)
     h = [10000000,1000000,100000,10000]
-    for x in range(0,3):
+    for x in range(0,4):
       y = int(h[x] * float(self.LP.l_poly[x]))
       cloudlog.debug("l_poly %d" % y)
 

@@ -387,7 +387,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     dPoly_can = [0,0,0,0]
 
 
-    for x in range(0,3):
+    for x in range(0,4):
       lPoly_can[x] = z[x] * sm['pathPlan'].lPoly[x] + b[x]
       rPoly_can[x] = z[x] * sm['pathPlan'].rPoly[x] + b[x]
       dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
