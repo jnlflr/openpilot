@@ -211,8 +211,9 @@ class DriverStatus():
     if (not self.face_detected or (self.driver_distraction_filter.x > 0.63 and self.driver_distracted and self.face_detected)) and \
        not (standstill and self.awareness - self.step_change <= self.threshold_prompt):
       self.awareness = max(self.awareness - self.step_change, -0.1)
-
+    
     alert = None
+    """
     if self.awareness <= 0.:
       # terminal red alert: disengagement required
       alert = 'driverDistracted' if self.active_monitoring_mode else 'driverUnresponsive'
@@ -225,7 +226,7 @@ class DriverStatus():
     elif self.awareness <= self.threshold_pre:
       # pre green alert
       alert = 'preDriverDistracted' if self.active_monitoring_mode else 'preDriverUnresponsive'
-
+    """
     if alert is not None:
       events.append(create_event(alert, [ET.WARNING]))
 

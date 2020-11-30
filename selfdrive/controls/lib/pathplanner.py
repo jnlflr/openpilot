@@ -206,6 +206,8 @@ class PathPlanner():
     plan_send.pathPlan.lProb = float(self.LP.l_prob)
     plan_send.pathPlan.rPoly = [float(x) for x in self.LP.r_poly]
     plan_send.pathPlan.rProb = float(self.LP.r_prob)
+    for x in self.LP.l_poly:
+      cloudlog.debug("l_poly %d" % x)
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
