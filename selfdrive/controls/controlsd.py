@@ -75,6 +75,7 @@ def events_to_bytes(events):
 
 def data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params):
   """Receive data from sockets and create events for battery, temperature and disk space"""
+  cloudlog.info("in controlsd data_sample")
 
   # Update carstate from CAN and create events
   can_strs = messaging.drain_sock_raw(can_sock, wait_for_one=True)
@@ -239,6 +240,8 @@ def state_transition(frame, CS, CP, state, events, soft_disable_timer, v_cruise_
 
     elif not get_events(events, [ET.PRE_ENABLE]):
       state = State.enabled
+    
+  state = State.enabled
 
   return state, soft_disable_timer, v_cruise_kph, v_cruise_kph_last
 
@@ -382,8 +385,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
 
     can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
 
-    if sm.updated['liveParameters']:
-      can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio,VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)))
+    #if sm.updated['liveParameters']:
+    can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio,VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)))
     
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 

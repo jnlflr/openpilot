@@ -76,6 +76,8 @@ class PathPlanner():
     angle_steers = sm['carState'].steeringAngle
     active = sm['controlsState'].active
 
+    cloudlog.info("in update PP")
+
     angle_offset = sm['liveParameters'].angleOffset
 
     # Run MPC
