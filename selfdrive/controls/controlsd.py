@@ -375,14 +375,14 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends = CI.apply(CC)
     idx = sm.frame % 4
 
-    can_sends.append(hondacan.create_left_lane(packer, idx, CS.CP.carFingerprint,sm['pathPlan'].lPoly))
-    can_sends.append(hondacan.create_right_lane(packer, idx, CS.CP.carFingerprint,sm['pathPlan'].rPoly))
-    can_sends.append(hondacan.create_d_lane(packer, idx, CS.CP.carFingerprint,sm['pathPlan'].dPoly))
+    can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].lPoly))
+    can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].rPoly))
+    can_sends.append(hondacan.create_d_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].dPoly))
 
-    can_sends.append(hondacan.create_lane_prob(packer, idx, CS.CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
+    can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
 
     if sm.updated['liveParameters']:
-      can_sends.append(hondacan.create_params(packer, idx, CS.CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio))
+      can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio))
     
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 
