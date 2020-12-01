@@ -12,7 +12,7 @@ from cereal import log
 LaneChangeState = log.PathPlan.LaneChangeState
 LaneChangeDirection = log.PathPlan.LaneChangeDirection
 
-LOG_MPC = os.environ.get('LOG_MPC', False)
+LOG_MPC = True #os.environ.get('LOG_MPC', False)
 
 DESIRES = {
   LaneChangeDirection.none: {
@@ -226,6 +226,9 @@ class PathPlanner():
     plan_send.pathPlan.laneChangeDirection = lane_change_direction
 
     pm.send('pathPlan', plan_send)
+
+    for y in self.mpc_solution[0].x:
+      cloudlog.debug("PP mpc x %d" % self.mpc_solution[0].x[y])
 
     if LOG_MPC:
       dat = messaging.new_message()
