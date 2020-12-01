@@ -389,10 +389,10 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
 
     for x in range(0,4):
       lPoly_can[x] = z[x] * md.leftLane.poly[x] + b[x]
-      cloudlog.debug("poly %d" % lPoly_can[x])
       rPoly_can[x] = z[x] * md.rightLane.poly[x] + b[x]
       #dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
     
+    curv = VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)
     #for y in sm['liveMpc'].x:
     #cloudlog.debug("mpc x %d" % int(sm['liveMpc'].x[0]))
 
@@ -400,9 +400,18 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,rPoly_can))
     #can_sends.append(hondacan.create_d_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].dPoly))
 
-    can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
-    can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio,VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)))
+    can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth,sm['liveParameters'].stiffnessFactor))
+    can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffsetAverage, sm['liveParameters'].steerRatio,curv,sm['liveParameters'].yawRate))
     
+    cloudlog.debug("angle offset %d" % sm['liveParameters'].angleOffset)
+    cloudlog.debug("angle offset av %d" % sm['liveParameters'].angleOffsetAverage)
+    cloudlog.debug("steer ratio %d" % sm['liveParameters'].steerRatio)
+    cloudlog.debug("curvature %d" % curv)
+    cloudlog.debug("yaw rate %d" % sm['liveParameters'].yawRate)
+    cloudlog.debug("stiff factor %d" % sm['liveParameters'].stiffnessFactor)
+
+
+
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 
   force_decel = driver_status.awareness < 0.

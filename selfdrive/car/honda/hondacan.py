@@ -57,22 +57,23 @@ def create_d_lane(packer, idx, car_fingerprint,d_poly):
   bus = 0
   return packer.make_can_msg("D_LANE", bus, values, idx)
 
-def create_lane_prob(packer, idx, car_fingerprint,l_prob,r_prob,lane_width):
+def create_lane_prob(packer, idx, car_fingerprint,l_prob,r_prob,lane_width,stiffness):
   values = {
     "L_PROB": l_prob,
     "R_PROB": r_prob,
     "LANE_WIDTH": lane_width,
+    "STIFFNESS": stiffness,
   }
   bus = 0
   return packer.make_can_msg("PROB", bus, values, idx)
 
-def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,stiffness,sR,curvature):
+def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,stiffness,sR,curvature,yawrate):
   values = {
     "AO_OFFSET": angleOffset,
     "AO_OFFSET_AV": angleOffsetAverage,
-    "STIFFNESS": stiffness,
     "STEER_RATIO": sR,
     "CURV_FACTOR": curvature,
+    "YAW_RATE": yawrate,
   }
   bus = 0
   return packer.make_can_msg("PARAMS", bus, values, idx)
