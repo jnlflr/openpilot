@@ -210,6 +210,10 @@ class PathPlanner():
     for x in range(0,4):
       y = int(h[x] * float(self.LP.l_poly[x]))
       cloudlog.debug("l_poly %d" % y)
+    
+    for x in range(0,4):
+      d = int(h[x] * (float(self.LP.l_poly[x]) - sm['model'].leftLane.poly[x]))
+      cloudlog.debug("delta %d" % d)
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
