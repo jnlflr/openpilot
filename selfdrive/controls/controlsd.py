@@ -393,8 +393,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
       rPoly_can[x] = z[x] * md.rightLane.poly[x] + b[x]
       #dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
     
-    for y in sm['liveMpc'].x:
-      cloudlog.debug("mpc x %d" % sm['liveMpc'].x[y])
+    #for y in sm['liveMpc'].x:
+    cloudlog.debug("mpc x %d" % sm['liveMpc'].cost)
 
     can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
     can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,rPoly_can))
