@@ -67,7 +67,7 @@ def create_lane_prob(packer, idx, car_fingerprint,l_prob,r_prob,lane_width,stiff
   bus = 0
   return packer.make_can_msg("PROB", bus, values, idx)
 
-def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,stiffness,sR,curvature,yawrate):
+def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,sR,curvature,yawrate):
   values = {
     "AO_OFFSET": angleOffset,
     "AO_OFFSET_AV": angleOffsetAverage,
