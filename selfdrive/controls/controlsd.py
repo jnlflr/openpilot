@@ -390,18 +390,17 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     for x in range(0,4):
       lPoly_can[x] = z[x] * md.leftLane.poly[x] + b[x]
       cloudlog.debug("poly %d" % lPoly_can[x])
-      #rPoly_can[x] = z[x] * sm['pathPlan'].rPoly[x] + b[x]
+      rPoly_can[x] = z[x] * md.rightLane.poly[x] + b[x]
       #dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
     
-    cloudlog.debug("mpc x %d" % sm['liveMpc'].x)
+    for y in sm['liveMpc'].x:
+      cloudlog.debug("mpc x %d" % sm['liveMpc'].x[y])
 
     can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
-    #can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].rPoly))
+    can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,rPoly_can))
     #can_sends.append(hondacan.create_d_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].dPoly))
 
     can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth))
-
-    #if sm.updated['liveParameters']:
     can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffset,sm['liveParameters'].stiffnessFactor, sm['liveParameters'].steerRatio,VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)))
     
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
