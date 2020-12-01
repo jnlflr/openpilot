@@ -401,7 +401,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     #can_sends.append(hondacan.create_d_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].dPoly))
 
     can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth,sm['liveParameters'].stiffnessFactor))
-    can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['pathPlan'].angleOffsetAverage, sm['liveParameters'].steerRatio,curv,sm['liveParameters'].yawRate))
+    can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['liveParameters'].angleOffsetAverage, sm['liveParameters'].steerRatio,curv,sm['liveParameters'].yawRate))
     
     cloudlog.debug("angle offset %d" % sm['liveParameters'].angleOffset)
     cloudlog.debug("angle offset av %d" % sm['liveParameters'].angleOffsetAverage)
@@ -409,8 +409,6 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     cloudlog.debug("curvature %d" % curv)
     cloudlog.debug("yaw rate %d" % sm['liveParameters'].yawRate)
     cloudlog.debug("stiff factor %d" % sm['liveParameters'].stiffnessFactor)
-
-
 
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 
