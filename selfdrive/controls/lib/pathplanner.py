@@ -227,8 +227,7 @@ class PathPlanner():
 
     pm.send('pathPlan', plan_send)
 
-    for y in self.mpc_solution[0].x:
-      cloudlog.debug("PP mpc x %d" % self.mpc_solution[0].x[y])
+    cloudlog.debug("PP mpc x %d" % self.mpc_solution[0].cost)
 
     if LOG_MPC:
       dat = messaging.new_message()
