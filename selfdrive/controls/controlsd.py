@@ -392,6 +392,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
       cloudlog.debug("poly %d" % lPoly_can[x])
       #rPoly_can[x] = z[x] * sm['pathPlan'].rPoly[x] + b[x]
       #dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
+    
+    cloudlog.debug("mpc x %d" % sm['liveMpc'].x)
 
     can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
     #can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,sm['pathPlan'].rPoly))
@@ -514,7 +516,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
   if sm is None:
     sm = messaging.SubMaster(['thermal', 'health', 'liveCalibration', 'driverMonitoring', 'plan', 'pathPlan', \
-                              'model', 'gpsLocation','liveParameters'], ignore_alive=['gpsLocation'])
+                              'model', 'gpsLocation','liveParameters','liveMpc'], ignore_alive=['gpsLocation'])
 
 
   if can_sock is None:
