@@ -396,7 +396,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     
     cloudlog.debug("cost mpc %s" % (sm['liveMpc'].cost))
     liste = list(sm['liveMpc'].delta)
-    cloudlog.debug("type liste %s" % type(liste))
+    cloudlog.debug("type liste %s" % type(liste[1]))
 
 
 
