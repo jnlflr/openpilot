@@ -238,4 +238,4 @@ class PathPlanner():
       pm.send('liveMpc', dat)
 
     cloudlog.debug("PP mpc cost %d" % self.mpc_solution[0].cost)
-    cloudlog.debug("len mpc x %d" % len(dat.liveMpc.x))
+    cloudlog.debug("len mpc x[1] %d" % len(dat.liveMpc.x[1]))
