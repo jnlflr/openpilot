@@ -213,7 +213,8 @@ class PathPlanner():
       d = (y-o)*1000
       cloudlog.debug("l_poly - md_poly - delta %d %d %d" % (y,o,d))
     
-    cloudlog.debug("type mpc x %s" % type(self.mpc_solution[0].x))
+    liste = list(self.mpc_solution[0].x)
+    cloudlog.debug("type mpc x1 %s" % type(liste[1]))
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
