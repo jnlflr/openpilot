@@ -1556,6 +1556,8 @@ struct LiveMpcData {
   calculationTime @5 :UInt64;
   cost @6 :Float64;
   delta1 @7 :Float32;
+  rate0 @8 : Float32;
+  x1 @9 : Float32;
 }
 
 struct LiveLongitudinalMpcData {

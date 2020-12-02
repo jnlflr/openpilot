@@ -240,4 +240,6 @@ class PathPlanner():
       dat.liveMpc.delta = list(self.mpc_solution[0].delta)
       dat.liveMpc.cost = self.mpc_solution[0].cost
       dat.liveMpc.delta1 = dat.liveMpc.delta[1]
+      dat.liveMpc.rate0 = float(self.mpc_solution[0].rate[0])
+      dat.liveMpc.x1 = dat.liveMpc.x[1]
       pm.send('liveMpc', dat)

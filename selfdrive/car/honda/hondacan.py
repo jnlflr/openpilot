@@ -78,11 +78,12 @@ def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,sR
   bus = 0
   return packer.make_can_msg("PARAMS", bus, values, idx)
 
-def create_mpc(packer, idx, car_fingerprint,l_prob,r_prob,lane_width):
+def create_mpc(packer, idx, car_fingerprint,delta,rate,cost,x):
   values = {
-    "L_PROB": l_prob,
-    "R_PROB": r_prob,
-    "LANE_WIDTH": lane_width,
+    "DELTA_1": delta,
+    "RATE_0": rate,
+    "COST": cost,
+    "X1": x,
   }
   bus = 0
   return packer.make_can_msg("MPC", bus, values, idx)
