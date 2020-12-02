@@ -1555,6 +1555,7 @@ struct LiveMpcData {
   qpIterations @4 :UInt32;
   calculationTime @5 :UInt64;
   cost @6 :Float64;
+  delta1 @7 :Float32;
 }
 
 struct LiveLongitudinalMpcData {

@@ -215,8 +215,7 @@ class PathPlanner():
     
     liste = list(self.mpc_solution[0].delta)
     cloudlog.debug("type mpc delta1 %s" % type(liste[1]))
-    for h in liste:
-      cloudlog.debug("mpc delta values %f" % h)
+    cloudlog.debug("mpc delta values %f" % liste[0])
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
@@ -240,4 +239,5 @@ class PathPlanner():
       dat.liveMpc.psi = list(self.mpc_solution[0].psi)
       dat.liveMpc.delta = list(self.mpc_solution[0].delta)
       dat.liveMpc.cost = self.mpc_solution[0].cost
+      dat.liveMpc.delta1 = dat.liveMpc.delta[1]
       pm.send('liveMpc', dat)

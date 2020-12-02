@@ -394,10 +394,10 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     
     curv = VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)
     
-    cloudlog.debug("cost mpc %s" % (sm['liveMpc'].cost))
-    liste = list(sm['liveMpc'].delta)
+    cloudlog.debug("delta mpc %s" % (sm['liveMpc'].delta1))
+    """liste = list(sm['liveMpc'].delta)
     elm1 = float(liste[1])
-    cloudlog.debug("type liste %s" % elm1)
+    cloudlog.debug("type liste %s" % elm1)"""
 
 
 
