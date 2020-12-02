@@ -212,6 +212,8 @@ class PathPlanner():
       o = int(h[x] * float(sm['model'].leftLane.poly[x]))
       d = (y-o)*1000
       cloudlog.debug("l_poly - md_poly - delta %d %d %d" % (y,o,d))
+    
+    cloudlog.debug("type mpc x %s" % type(self.mpc_solution[0].x))
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
@@ -237,5 +239,4 @@ class PathPlanner():
       dat.liveMpc.cost = self.mpc_solution[0].cost
       pm.send('liveMpc', dat)
 
-    cloudlog.debug("PP mpc cost %d" % self.mpc_solution[0].cost)
-    cloudlog.debug("len mpc x[1] %d" % len(dat.liveMpc.x[1]))
+    cloudlog.debug("PP mpc cost %s" % self.mpc_solution[0].cost)

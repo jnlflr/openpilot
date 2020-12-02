@@ -394,7 +394,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     
     curv = VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)
     #for y in sm['liveMpc'].x:
-    #cloudlog.debug("mpc x %d" % int(sm['liveMpc'].x[0]))
+    cloudlog.debug("type mpc x %s" % type(sm['liveMpc'].x))
 
     can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
     can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,rPoly_can))
@@ -403,8 +403,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth,sm['liveParameters'].stiffnessFactor,sm['liveParameters'].yawRate))
     can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['liveParameters'].angleOffsetAverage, sm['liveParameters'].steerRatio, curv))
     
-    cloudlog.debug("angle offset %d" % (sm['liveParameters'].angleOffset * 100))
-    cloudlog.debug("angle offset av %d" % (sm['liveParameters'].angleOffsetAverage * 100))
+    cloudlog.debug("angle offset %f" % (sm['liveParameters'].angleOffset * 1))
+    cloudlog.debug("angle offset av %f" % (sm['liveParameters'].angleOffsetAverage * 1))
     cloudlog.debug("steer ratio %d" % sm['liveParameters'].steerRatio)
     cloudlog.debug("curvature %d" % (curv * 1000))
     cloudlog.debug("yaw rate %d" % (sm['liveParameters'].yawRate * 10000))
