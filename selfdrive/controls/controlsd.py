@@ -393,9 +393,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
       #dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
     
     curv = VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)
-    #for y in sm['liveMpc'].x:
-    liste =  list(sm['liveMpc'].x)
-    cloudlog.debug("type mpc x %s" % type(liste))
+    
+    cloudlog.debug("cost mpc %s" % (sm['liveMpc'].cost))
 
     can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
     can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,rPoly_can))

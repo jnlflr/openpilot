@@ -240,5 +240,3 @@ class PathPlanner():
       dat.liveMpc.delta = list(self.mpc_solution[0].delta)
       dat.liveMpc.cost = self.mpc_solution[0].cost
       pm.send('liveMpc', dat)
-
-    cloudlog.debug("PP mpc cost %s" % self.mpc_solution[0].cost)
