@@ -227,8 +227,6 @@ class PathPlanner():
 
     pm.send('pathPlan', plan_send)
 
-    cloudlog.debug("PP mpc x %d" % self.mpc_solution[0].cost)
-
     if LOG_MPC:
       dat = messaging.new_message()
       dat.init('liveMpc')
@@ -238,3 +236,6 @@ class PathPlanner():
       dat.liveMpc.delta = list(self.mpc_solution[0].delta)
       dat.liveMpc.cost = self.mpc_solution[0].cost
       pm.send('liveMpc', dat)
+
+    cloudlog.debug("PP mpc cost %d" % self.mpc_solution[0].cost)
+    cloudlog.debug("len mpc x %d" % len(dat.liveMpc.x))
