@@ -215,7 +215,8 @@ class PathPlanner():
     
     liste = list(self.mpc_solution[0].x)
     cloudlog.debug("type mpc x1 %s" % type(liste[1]))
-    cloudlog.debug("mpc x1 value %f" % liste[1])
+    for h in liste:
+      cloudlog.debug("mpc values %f" % h)
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
