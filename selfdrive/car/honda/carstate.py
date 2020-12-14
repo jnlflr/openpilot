@@ -40,7 +40,8 @@ def get_can_signals(CP):
 # this function generates lists for signal, messages and initial values
   signals = [
       ("SPEED1", "SPEEDS", 0),
-      ("WHEEL_SPEED_FT", "WHEEL_SPEEDS", 0),
+      ("WHEEL_SPEED_FR", "WHEEL_SPEEDS", 0),
+      ("WHEEL_SPEED_FL", "WHEEL_SPEEDS", 0),
       ("WHEEL_SPEED_RL", "WHEEL_SPEEDS", 0),
       ("WHEEL_SPEED_RR", "WHEEL_SPEEDS", 0),
 
