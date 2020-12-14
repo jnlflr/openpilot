@@ -40,12 +40,14 @@ def get_can_signals(CP):
 # this function generates lists for signal, messages and initial values
   signals = [
       ("SPEED1", "SPEEDS", 0),
-      ("WHEEL_SPEED_FT", "FRONT_SPEEDS", 0),
-      ("WHEEL_SPEED_RL", "REAR_SPEEDS", 0),
-      ("WHEEL_SPEED_RR", "REAR_SPEEDS", 0),
+      ("WHEEL_SPEED_FT", "WHEEL_SPEEDS", 0),
+      ("WHEEL_SPEED_RL", "WHEEL_SPEEDS", 0),
+      ("WHEEL_SPEED_RR", "WHEEL_SPEEDS", 0),
 
       ("STEER_ANGLE", "STEERING_SENSORS", 0),
+      ("STEER_ANGLE_SIGN", "STEERING_SENSORS", 0),
       ("STEER_ANGLE_RATE", "STEERING_SENSORS", 0),
+      ("STEER_ANGLE_RATE_SIGN", "STEERING_SENSORS", 0),
       ("STEER_TORQUE", "STEERING_CONTROL", 0),
 
       ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
@@ -65,9 +67,8 @@ def get_can_signals(CP):
 
   checks = [
       ("POWERTRAIN_DATA", 100),
-      ("FRONT_SPEEDS", 25),
-      ("REAR_SPEEDS", 25),
-      ("SPEEDS", 25),
+      ("WHEEL_SPEEDS", 100),
+      ("SPEEDS", 100),
       ("STEERING_SENSORS", 100),
       ("STEERING_CONTROL", 100),
       ("MACCHINA", 100),
@@ -155,10 +156,10 @@ class CarState():
 
     # calc best v_ego estimate, by averaging two opposite corners
     speed_factor = SPEED_FACTOR[self.CP.carFingerprint]
-    self.v_wheel_fl = cp.vl["FRONT_SPEEDS"]['WHEEL_SPEED_FT'] * CV.KPH_TO_MS * speed_factor
-    self.v_wheel_fr = cp.vl["FRONT_SPEEDS"]['WHEEL_SPEED_FT'] * CV.KPH_TO_MS * speed_factor
-    self.v_wheel_rl = cp.vl["REAR_SPEEDS"]['WHEEL_SPEED_RL'] * CV.KPH_TO_MS * speed_factor
-    self.v_wheel_rr = cp.vl["REAR_SPEEDS"]['WHEEL_SPEED_RR'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_fl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FT'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_fr = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FT'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_rl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_RL'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_rr = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_RR'] * CV.KPH_TO_MS * speed_factor
     self.v_wheel = (self.v_wheel_fl+self.v_wheel_fr+self.v_wheel_rl+self.v_wheel_rr)/4.
 
     if self.CP.carFingerprint in (CAR.ACCORD, CAR.ESSAI): # TODO: find wheels moving bit in dbc
@@ -197,8 +198,8 @@ class CarState():
 
     self.gear = 0 if self.CP.carFingerprint == CAR.CIVIC else cp.vl["MACCHINA"]['GEAR']
     #self.gear = 4 # cf DBC Honda
-    self.angle_steers = cp.vl["STEERING_SENSORS"]['STEER_ANGLE']
-    self.angle_steers_rate = cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE']
+    self.angle_steers = (cp.vl["STEERING_SENSORS"]['STEER_ANGLE']) * (2*cp.vl["STEERING_SENSORS"]['STEER_ANGLE_SIGN']-1) * CV.RAD_TO_DEG
+    self.angle_steers_rate = (cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE']) * (2*cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE_SIGN']-1) * CV.RAD_TO_DEG
 
     self.cruise_setting = cp.vl["MACCHINA"]['CRUISE_SETTING']
     self.cruise_buttons = cp.vl["MACCHINA"]['CRUISE_BUTTONS']
