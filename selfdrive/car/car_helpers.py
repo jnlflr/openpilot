@@ -92,7 +92,7 @@ def fingerprint(logcan, sendcan, has_relay):
 
     # if we only have one car choice and the time since we got our first
     # message has elapsed, exit
-    for b in candidate_cars:
+    """for b in candidate_cars:
       cloudlog.warning("b list %s", b)
       cloudlog.warning("car_fingerprint %s", candidate_cars[b][0])
       # Toyota needs higher time to fingerprint, since DSU does not broadcast immediately
@@ -101,7 +101,7 @@ def fingerprint(logcan, sendcan, has_relay):
       if len(candidate_cars[b]) == 1:
         if frame > frame_fingerprint:
           # fingerprint done
-          car_fingerprint = candidate_cars[b][0]
+          car_fingerprint = candidate_cars[b][0]"""
     
     car_fingerprint = "HONDA ESSAI"
 
