@@ -77,7 +77,7 @@ class PathPlanner():
     active = sm['controlsState'].active
 
     #cloudlog.info("in update PP")
-    cloudlog.info("angle steers %d", angle_steers)
+    #cloudlog.info("angle steers %d", angle_steers)
 
     angle_offset = sm['liveParameters'].angleOffset
 
@@ -160,7 +160,10 @@ class PathPlanner():
 
     # account for actuation delay
     self.cur_state = calc_states_after_delay(self.cur_state, v_ego, angle_steers - angle_offset, curvature_factor, VM.sR, CP.steerActuatorDelay)
-    cloudlog.info("%d, %d, %d, %d, %d, %d", v_ego, angle_steers, angle_offset, curvature_factor, VM.sR, VM.cF)
+    cloudlog.degug("%f, %f, %f, %f, %f, %f" % (v_ego, angle_steers, angle_offset, curvature_factor, VM.sR, VM.cF))
+    for x in range(0,4):
+      y = int(float(self.LP.d_poly[x]))
+      cloudlog.debug("d_poly C%f: %f" % (x,y))
 
     v_ego_mpc = max(v_ego, 5.0)  # avoid mpc roughness due to low speed
     self.libmpc.run_mpc(self.cur_state, self.mpc_solution,
@@ -209,15 +212,15 @@ class PathPlanner():
     plan_send.pathPlan.rPoly = [float(x) for x in self.LP.r_poly]
     plan_send.pathPlan.rProb = float(self.LP.r_prob)
 
-    for x in range(0,4):
+    """for x in range(0,4):
       y = int(float(self.LP.l_poly[x]))
       o = int(float(sm['model'].leftLane.poly[x]))
       d = (y-o)
-      cloudlog.debug("l_poly - md_poly - delta %f %f %f" % (y,o,d))
+      cloudlog.debug("l_poly - md_poly - delta %f %f %f" % (y,o,d))"""
     
-    liste = list(self.mpc_solution[0].delta)
-    cloudlog.debug("type mpc delta1 %s" % type(liste[1]))
-    cloudlog.debug("mpc delta values 1 %f" % liste[1])
+    #liste = list(self.mpc_solution[0].delta)
+    #cloudlog.debug("type mpc delta1 %s" % type(liste[1]))
+    #cloudlog.debug("mpc delta values 1 %f" % liste[1])
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
