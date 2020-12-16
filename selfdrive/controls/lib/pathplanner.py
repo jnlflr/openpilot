@@ -76,7 +76,8 @@ class PathPlanner():
     angle_steers = sm['carState'].steeringAngle
     active = sm['controlsState'].active
 
-    cloudlog.info("in update PP")
+    #cloudlog.info("in update PP")
+    cloudlog.info("angle steers %d", angle_steers)
 
     angle_offset = sm['liveParameters'].angleOffset
 
@@ -159,6 +160,7 @@ class PathPlanner():
 
     # account for actuation delay
     self.cur_state = calc_states_after_delay(self.cur_state, v_ego, angle_steers - angle_offset, curvature_factor, VM.sR, CP.steerActuatorDelay)
+    cloudlog.info("%d, %d, %d, %d, %d, %d", v_ego, angle_steers, angle_offset, curvature_factor, VM.sR, VM.cF)
 
     v_ego_mpc = max(v_ego, 5.0)  # avoid mpc roughness due to low speed
     self.libmpc.run_mpc(self.cur_state, self.mpc_solution,
