@@ -160,10 +160,10 @@ class PathPlanner():
 
     # account for actuation delay
     self.cur_state = calc_states_after_delay(self.cur_state, v_ego, angle_steers - angle_offset, curvature_factor, VM.sR, CP.steerActuatorDelay)
-    cloudlog.degug("%f, %f, %f, %f, %f, %f" % (v_ego, angle_steers, angle_offset, curvature_factor, VM.sR, VM.cF))
-    for x in range(0,4):
-      y = int(float(self.LP.d_poly[x]))
-      cloudlog.debug("d_poly C%f: %f" % (x,y))
+    #cloudlog.degug("%f, %f, %f, %f, %f, %f" % (v_ego, angle_steers, angle_offset, curvature_factor, VM.sR, VM.cF))
+    #for x in range(0,4):
+    #  y = int(float(self.LP.d_poly[x]))
+    #  cloudlog.debug("d_poly C%f: %f" % (x,y))
 
     v_ego_mpc = max(v_ego, 5.0)  # avoid mpc roughness due to low speed
     self.libmpc.run_mpc(self.cur_state, self.mpc_solution,
