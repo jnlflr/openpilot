@@ -26,7 +26,7 @@ class LatControlPID():
     else:
       self.angle_steers_des = path_plan.angleSteers  # get from MPC/PathPlanner
 
-      steers_max = get_steer_max(CP, v_ego)
+      steers_max = 10. #get_steer_max(CP, v_ego)
       self.pid.pos_limit = steers_max
       self.pid.neg_limit = -steers_max
       steer_feedforward = self.angle_steers_des   # feedforward desired angle

@@ -70,8 +70,8 @@ def create_lane_prob(packer, idx, car_fingerprint,l_prob,r_prob,lane_width,stiff
 
 def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,sR,curvature):
   values = {
-    "AO_OFFSET": angleOffset,
-    "AO_OFFSET_AV": angleOffsetAverage,
+    "AO_OFFSET": (angleOffset+10)/0.0005,
+    "AO_OFFSET_AV": (angleOffsetAverage+10)/0.0005,
     "STEER_RATIO": sR,
     "CURV_FACTOR": (curvature+50)/0.005,
   }
@@ -82,21 +82,21 @@ def create_mpc(packer, idx, car_fingerprint,delta,rate,cost,x):
   values = {
     "DELTA_1": ((delta+15)/0.0005),
     "RATE_0": ((rate+50)/0.001),
-    "ANGLE_STEERS": (cost+50)/0.005,
+    "ANGLE_STEERS": (cost+3000)/0.15,
     "X1": x,
   }
   bus = 0
   return packer.make_can_msg("MPC", bus, values, idx)
 
-def scale(data):
-  return (data/0.001)+30000
+def scale(data,fact,add):
+  return (data/fact)+add
 
 def create_long1(packer, idx, car_fingerprint,dist,vel,yvel,avel):
   values = {
-    "DIST": scale(dist),
-    "VEL": scale(vel),
-    "Y": scale(yvel),
-    "A": scale(avel),
+    "DIST": scale(dist,0.01,30000),
+    "VEL": scale(vel,0.001,30000),
+    "Y": scale(yvel,0.001,30000),
+    "A": scale(avel,0.001,30000),
   }
   bus = 0
   return packer.make_can_msg("LONG_1", bus, values, idx)
@@ -117,7 +117,7 @@ def create_steering_control(packer, apply_steer, apply_steer_clipped, angle_des,
   values = {
     "STEER_TORQUE": (apply_steer+50)/0.005,
     "STEER_CLIP": apply_steer_clipped+4096,
-	  "ANGLE_DES": (angle_des+50)/0.005,
+	  "ANGLE_DES": (angle_des+300)/0.1,
   }
   bus = 0
   return packer.make_can_msg("STEERING_CONTROL", bus, values, idx)
