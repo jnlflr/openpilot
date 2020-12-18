@@ -75,11 +75,12 @@ class PathPlanner():
     v_ego = sm['carState'].vEgo
     angle_steers = sm['carState'].steeringAngle
     active = sm['controlsState'].active
-
-    #cloudlog.info("in update PP")
-    #cloudlog.info("angle steers %d", angle_steers)
-
     angle_offset = sm['liveParameters'].angleOffset
+    
+    cloudlog.debug("v_ego %f" % v_ego)
+    cloudlog.debug("angle_steers %f" % angle_steers)
+    cloudlog.debug("angle_offset %f" % angle_offset)
+    cloudlog.debug("steerRatio %f" % sm['liveParameters'].steerRatio)
 
     # Run MPC
     self.angle_steers_des_prev = self.angle_steers_des_mpc
@@ -146,6 +147,8 @@ class PathPlanner():
       self.libmpc.init_weights(MPC_COST_LAT.PATH / 10.0, MPC_COST_LAT.LANE, MPC_COST_LAT.HEADING, self.steer_rate_cost)
     else:
       self.libmpc.init_weights(MPC_COST_LAT.PATH, MPC_COST_LAT.LANE, MPC_COST_LAT.HEADING, self.steer_rate_cost)
+
+
 
     self.LP.update_d_poly(v_ego)
 

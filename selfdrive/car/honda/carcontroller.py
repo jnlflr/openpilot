@@ -123,8 +123,9 @@ class CarController():
     # steer torque is converted back to CAN reference (positive when steering right)
     apply_gas = clip(actuators.gas, 0., 1.)
     apply_brake = int(clip(self.brake_last * BRAKE_MAX, 0, BRAKE_MAX - 1))
-    apply_steer = int(clip(-actuators.steer * STEER_MAX, -STEER_MAX, STEER_MAX))
-    angle_des = 4000 + int(actuators.steerAngle * 10.)
+    apply_steer_clipped = int(clip(-actuators.steer * STEER_MAX, -STEER_MAX, STEER_MAX))
+    apply_steer = -actuators.steer * 100.
+    angle_des = actuators.steerAngle
 
 
     lkas_active = enabled and not CS.steer_not_allowed
@@ -134,7 +135,7 @@ class CarController():
 
     # Send steering command.
     idx = frame % 4
-    can_sends.append(hondacan.create_steering_control(self.packer, apply_steer, angle_des,
+    can_sends.append(hondacan.create_steering_control(self.packer, apply_steer, apply_steer_clipped, angle_des,
       lkas_active, enabled, CS.CP.carFingerprint, idx))
 
     # Send dashboard UI commands.

@@ -391,7 +391,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
       rPoly_can[x] = z[x] * md.rightLane.poly[x] + b[x]
       #dPoly_can[x] = z[x] * sm['pathPlan'].dPoly[x] + b[x]
     
-    curv = VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)
+    #curv = VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)
+    curv = VM.curvature_factor(CS.vEgo)
     
     cloudlog.debug("delta mpc %s" % (sm['liveMpc'].delta1))
     cloudlog.debug("rate mpc %s" % (sm['liveMpc'].rate0))
@@ -404,7 +405,11 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
 
     can_sends.append(hondacan.create_lane_prob(packer, idx, CP.carFingerprint, sm['pathPlan'].lProb, sm['pathPlan'].rProb, sm['pathPlan'].laneWidth,sm['liveParameters'].stiffnessFactor,sm['liveParameters'].yawRate))
     can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['liveParameters'].angleOffsetAverage, sm['liveParameters'].steerRatio, curv))
-    can_sends.append(hondacan.create_mpc(packer, idx, CP.carFingerprint,sm['liveMpc'].delta1,sm['liveMpc'].rate0,sm['liveMpc'].cost,sm['liveMpc'].x1))
+    can_sends.append(hondacan.create_mpc(packer, idx, CP.carFingerprint,sm['liveMpc'].delta1,sm['liveMpc'].rate0,sm['pathPlan'].angleSteers,sm['liveMpc'].x1))
+
+    can_sends.append(hondacan.create_long1(packer, idx, CP.carFingerprint,md.lead.dist,md.lead.relVel,md.lead.relY,md.lead.relA))
+    can_sends.append(hondacan.create_long2(packer, idx, CP.carFingerprint,md.lead.prob,md.lead.relAStd,md.lead.std,md.lead.relVelStd,md.lead.relYStd))
+
 
     """cloudlog.debug("angle offset %f" % (sm['liveParameters'].angleOffset * 1))
     cloudlog.debug("angle offset av %f" % (sm['liveParameters'].angleOffsetAverage * 1))

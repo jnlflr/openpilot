@@ -73,29 +73,51 @@ def create_params(packer, idx, car_fingerprint,angleOffset,angleOffsetAverage,sR
     "AO_OFFSET": angleOffset,
     "AO_OFFSET_AV": angleOffsetAverage,
     "STEER_RATIO": sR,
-    "CURV_FACTOR": curvature,
+    "CURV_FACTOR": (curvature+50)/0.005,
   }
   bus = 0
   return packer.make_can_msg("PARAMS", bus, values, idx)
 
 def create_mpc(packer, idx, car_fingerprint,delta,rate,cost,x):
   values = {
-    "DELTA_1": delta,
-    "RATE_0": rate,
-    "COST": cost,
+    "DELTA_1": ((delta+15)/0.0005),
+    "RATE_0": ((rate+50)/0.001),
+    "ANGLE_STEERS": (cost+50)/0.005,
     "X1": x,
   }
   bus = 0
   return packer.make_can_msg("MPC", bus, values, idx)
 
+def scale(data):
+  return (data/0.001)+30000
 
-def create_steering_control(packer, apply_steer, angle_des, lkas_active, enabled, car_fingerprint, idx):
+def create_long1(packer, idx, car_fingerprint,dist,vel,yvel,avel):
   values = {
-    "STEER_TORQUE": apply_steer,
-    "LKAS_ACTIVE": lkas_active,
-	  "LK_MODE": False,
-	  "ST_NOT_ALL": 0x01,
-	  "ANGLE_DES": angle_des,
+    "DIST": scale(dist),
+    "VEL": scale(vel),
+    "Y": scale(yvel),
+    "A": scale(avel),
+  }
+  bus = 0
+  return packer.make_can_msg("LONG_1", bus, values, idx)
+
+def create_long2(packer, idx, car_fingerprint,prob,astd,diststd,velstd,ystd):
+  values = {
+    "PROB": prob*256,
+    "A_STD": (astd/0.1)+100,
+    "DIST_STD": scale(diststd),
+    "VEL_STD": scale(velstd),
+    "Y_STD": scale(ystd),
+  }
+  bus = 0
+  return packer.make_can_msg("LONG_2", bus, values, idx)
+
+
+def create_steering_control(packer, apply_steer, apply_steer_clipped, angle_des, lkas_active, enabled, car_fingerprint, idx):
+  values = {
+    "STEER_TORQUE": (apply_steer+50)/0.005,
+    "STEER_CLIP": apply_steer_clipped+4096,
+	  "ANGLE_DES": (angle_des+50)/0.005,
   }
   bus = 0
   return packer.make_can_msg("STEERING_CONTROL", bus, values, idx)
