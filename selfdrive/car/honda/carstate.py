@@ -46,9 +46,7 @@ def get_can_signals(CP):
       ("WHEEL_SPEED_RR", "WHEEL_SPEEDS_R", 0),
 
       ("STEER_ANGLE", "STEERING_SENSORS", 0),
-      ("STEER_ANGLE_SIGN", "STEERING_SENSORS", 0),
       ("STEER_ANGLE_RATE", "STEERING_SENSORS", 0),
-      ("STEER_ANGLE_RATE_SIGN", "STEERING_SENSORS", 0),
       ("STEER_TORQUE", "STEERING_CONTROL", 0),
 
       ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
@@ -199,8 +197,8 @@ class CarState():
 
     self.gear = 0 if self.CP.carFingerprint == CAR.CIVIC else cp.vl["MACCHINA"]['GEAR']
     #self.gear = 4 # cf DBC Honda
-    self.angle_steers = (cp.vl["STEERING_SENSORS"]['STEER_ANGLE']) * (2*cp.vl["STEERING_SENSORS"]['STEER_ANGLE_SIGN']-1)
-    self.angle_steers_rate = (cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE']) * (2*cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE_SIGN']-1)
+    self.angle_steers = (cp.vl["STEERING_SENSORS"]['STEER_ANGLE'])
+    self.angle_steers_rate = (cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE'])
 
     self.cruise_setting = cp.vl["MACCHINA"]['CRUISE_SETTING']
     self.cruise_buttons = cp.vl["MACCHINA"]['CRUISE_BUTTONS']
