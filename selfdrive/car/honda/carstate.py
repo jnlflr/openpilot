@@ -39,11 +39,11 @@ def calc_cruise_offset(offset, speed):
 def get_can_signals(CP):
 # this function generates lists for signal, messages and initial values
   signals = [
-      ("SPEED1", "SPEEDS", 0),
-      ("WHEEL_SPEED_FR", "WHEEL_SPEEDS", 0),
-      ("WHEEL_SPEED_FL", "WHEEL_SPEEDS", 0),
-      ("WHEEL_SPEED_RL", "WHEEL_SPEEDS", 0),
-      ("WHEEL_SPEED_RR", "WHEEL_SPEEDS", 0),
+      ("SPEED1", "WHEEL_SPEEDS_F", 0),
+      ("WHEEL_SPEED_FR", "WHEEL_SPEEDS_F", 0),
+      ("WHEEL_SPEED_FL", "WHEEL_SPEEDS_F", 0),
+      ("WHEEL_SPEED_RL", "WHEEL_SPEEDS_R", 0),
+      ("WHEEL_SPEED_RR", "WHEEL_SPEEDS_R", 0),
 
       ("STEER_ANGLE", "STEERING_SENSORS", 0),
       ("STEER_ANGLE_SIGN", "STEERING_SENSORS", 0),
@@ -68,8 +68,8 @@ def get_can_signals(CP):
 
   checks = [
       ("POWERTRAIN_DATA", 100),
-      ("WHEEL_SPEEDS", 100),
-      ("SPEEDS", 100),
+      ("WHEEL_SPEEDS_F", 50),
+      ("WHEEL_SPEEDS_R", 50),
       ("STEERING_SENSORS", 100),
       ("STEERING_CONTROL", 100),
       ("MACCHINA", 100),
@@ -157,10 +157,10 @@ class CarState():
 
     # calc best v_ego estimate, by averaging two opposite corners
     speed_factor = SPEED_FACTOR[self.CP.carFingerprint]
-    self.v_wheel_fl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FR'] * CV.KPH_TO_MS * speed_factor
-    self.v_wheel_fr = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FL'] * CV.KPH_TO_MS * speed_factor
-    self.v_wheel_rl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_RL'] * CV.KPH_TO_MS * speed_factor
-    self.v_wheel_rr = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_RR'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_fl = cp.vl["WHEEL_SPEEDS_F"]['WHEEL_SPEED_FR'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_fr = cp.vl["WHEEL_SPEEDS_F"]['WHEEL_SPEED_FL'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_rl = cp.vl["WHEEL_SPEEDS_R"]['WHEEL_SPEED_RL'] * CV.KPH_TO_MS * speed_factor
+    self.v_wheel_rr = cp.vl["WHEEL_SPEEDS_R"]['WHEEL_SPEED_RR'] * CV.KPH_TO_MS * speed_factor
     self.v_wheel = (self.v_wheel_fl+self.v_wheel_fr+self.v_wheel_rl+self.v_wheel_rr)/4.
 
     if self.CP.carFingerprint in (CAR.ACCORD, CAR.ESSAI): # TODO: find wheels moving bit in dbc
@@ -180,7 +180,7 @@ class CarState():
     # blend in transmission speed at low speed, since it has more low speed accuracy
     self.v_weight = interp(self.v_wheel, v_weight_bp, v_weight_v)
     #speed = (1. - self.v_weight) * cp.vl["ENGINE_DATA"]['XMISSION_SPEED'] * CV.KPH_TO_MS * speed_factor + \
-    speed = (1. - self.v_weight) * cp.vl["SPEEDS"]['SPEED1'] * CV.KPH_TO_MS * speed_factor + \
+    speed = (1. - self.v_weight) * cp.vl["WHEEL_SPEEDS_F"]['SPEED1'] * CV.KPH_TO_MS * speed_factor + \
       self.v_weight * self.v_wheel
 
     if abs(speed - self.v_ego) > 2.0:  # Prevent large accelerations when car starts at non zero speed

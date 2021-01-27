@@ -203,4 +203,4 @@ if __name__ == '__main__':
 
   CP = CarInterface.get_params(CAR.CIVIC)
   VM = VehicleModel(CP)
-  print(VM.yaw_rate(math.radians(20), 10.))
+  #print(VM.yaw_rate(math.radians(20), 10.))

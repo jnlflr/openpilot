@@ -132,8 +132,8 @@ class CarInterface(CarInterfaceBase):
     
     elif candidate in [CAR.CIVIC, CAR.VROUM, CAR.ESSAI]:
       stop_and_go = False
-      ret.mass =  1215 + STD_CARGO_KG
-      ret.wheelbase = 2.589
+      ret.mass =  1200 + STD_CARGO_KG
+      ret.wheelbase = 2.606
       ret.centerToFront = ret.wheelbase * 0.37
       ret.steerRatio = 15.2
       tire_stiffness_factor = 0.72
