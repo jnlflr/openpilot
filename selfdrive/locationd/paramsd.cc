@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 
   std::string fingerprint = car_params.getCarFingerprint();
   std::string vin = car_params.getCarVin();
-  double sR = car_params.getSteerRatio();
+  double sR = 15.2;
   double x = 1.0;
   double ao = 0.0;
   double posenet_invalid_count = 0;
