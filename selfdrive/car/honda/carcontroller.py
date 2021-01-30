@@ -124,7 +124,7 @@ class CarController():
     apply_gas = clip(actuators.gas, 0., 1.)
     apply_brake = int(clip(self.brake_last * BRAKE_MAX, 0, BRAKE_MAX - 1))
     apply_steer_clipped = int(clip(-actuators.steer * STEER_MAX, -STEER_MAX, STEER_MAX))
-    apply_steer = -actuators.steer * 100.
+    apply_steer = -actuators.steer #* 100.
     angle_des = actuators.steerAngle
 
 
