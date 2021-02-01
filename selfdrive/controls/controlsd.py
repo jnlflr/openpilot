@@ -299,6 +299,7 @@ def state_control(frame, rcv_frame, plan, path_plan, CS, CP, state, events, v_cr
                                               v_cruise_kph, v_acc_sol, plan.vTargetFuture, a_acc_sol, CP)
   # Steering PID loop and lateral MPC
   actuators.steer, actuators.steerAngle, lac_log = LaC.update(active, CS.vEgo, CS.steeringAngle, CS.steeringRate, CS.steeringTorqueEps, CS.steeringPressed, CS.steeringRateLimited, CP, path_plan)
+  cloudlog.debug("actuators.steer  %f" % (actuators.steer))
 
   # Send a "steering required alert" if saturation count has reached the limit
   if lac_log.saturated and not CS.steeringPressed:
@@ -394,9 +395,9 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     #curv = VM.calc_curvature((CS.steeringAngle - sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD, CS.vEgo)
     curv = VM.curvature_factor(CS.vEgo)
     
-    cloudlog.debug("delta mpc %s" % (sm['liveMpc'].delta1))
+    """cloudlog.debug("delta mpc %s" % (sm['liveMpc'].delta1))
     cloudlog.debug("rate mpc %s" % (sm['liveMpc'].rate0))
-    cloudlog.debug("x1 mpc %s" % (sm['liveMpc'].x1))
+    cloudlog.debug("x1 mpc %s" % (sm['liveMpc'].x1))"""
 
 
     can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
@@ -605,7 +606,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     start_time = sec_since_boot()
     prof.checkpoint("Ratekeeper", ignore=True)
 
-    cloudlog.info("car name %s" % CP.carName)
+    """cloudlog.info("car name %s" % CP.carName)
     #cloudlog.info("passive ? %s" % passive)
     #for x in sm['pathPlan'].lPoly:
     #  cloudlog.debug("lane width %d" % x)
@@ -613,7 +614,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     #cloudlog.debug("l_poly %d" % lpoly3)
     cloudlog.info("mpc sol valid ? %s" % sm['pathPlan'].mpcSolutionValid)
     cloudlog.info("info controlsd")
-    cloudlog.debug("debug controlsd")
+    cloudlog.debug("debug controlsd")"""
 
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter = data_sample(CI, CC, sm, can_sock, driver_status, state, mismatch_counter, params)
