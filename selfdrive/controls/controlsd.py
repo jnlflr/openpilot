@@ -407,8 +407,8 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends.append(hondacan.create_params(packer, idx, CP.carFingerprint,sm['liveParameters'].angleOffset,sm['liveParameters'].angleOffsetAverage, sm['liveParameters'].steerRatio, curv))
     can_sends.append(hondacan.create_mpc(packer, idx, CP.carFingerprint,sm['liveMpc'].delta1,sm['liveMpc'].rate0,sm['pathPlan'].angleSteers,sm['liveMpc'].x1))
 
-    can_sends.append(hondacan.create_long1(packer, idx, CP.carFingerprint,md.lead.dist,md.lead.relVel,md.lead.relY,md.lead.relA))
-    can_sends.append(hondacan.create_long2(packer, idx, CP.carFingerprint,md.lead.prob,md.lead.relAStd,md.lead.std,md.lead.relVelStd,md.lead.relYStd))
+    #can_sends.append(hondacan.create_long1(packer, idx, CP.carFingerprint,md.lead.dist,md.lead.relVel,md.lead.relY,md.lead.relA))
+    #can_sends.append(hondacan.create_long2(packer, idx, CP.carFingerprint,md.lead.prob,md.lead.relAStd,md.lead.std,md.lead.relVelStd,md.lead.relYStd))
 
 
     """cloudlog.debug("angle offset %f" % (sm['liveParameters'].angleOffset * 1))

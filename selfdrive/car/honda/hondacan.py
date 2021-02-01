@@ -90,7 +90,7 @@ def create_mpc(packer, idx, car_fingerprint,delta,rate,cost,x):
 
 def scale(data,fact,add):
   return (data/fact)+add
-
+"""
 def create_long1(packer, idx, car_fingerprint,dist,vel,yvel,avel):
   values = {
     "DIST": scale(dist,0.01,30000),
@@ -111,7 +111,7 @@ def create_long2(packer, idx, car_fingerprint,prob,astd,diststd,velstd,ystd):
   }
   bus = 0
   return packer.make_can_msg("LONG_2", bus, values, idx)
-
+"""
 
 def create_steering_control(packer, apply_steer, apply_steer_clipped, angle_des, lkas_active, enabled, car_fingerprint, idx):
   values = {
