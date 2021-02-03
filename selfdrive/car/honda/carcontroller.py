@@ -118,13 +118,13 @@ class CarController():
 
     # *** compute control surfaces ***
     BRAKE_MAX = 1024//4
-    STEER_MAX = 0x1000
+    STEER_MAX = 1000
 
     # steer torque is converted back to CAN reference (positive when steering right)
     apply_gas = clip(actuators.gas, 0., 1.)
     apply_brake = int(clip(self.brake_last * BRAKE_MAX, 0, BRAKE_MAX - 1))
     apply_steer_clipped = int(clip(-actuators.steer * STEER_MAX, -STEER_MAX, STEER_MAX))
-    apply_steer = -actuators.steer #* 100.
+    apply_steer = -actuators.steer * STEER_MAX #* 100.
     angle_des = actuators.steerAngle
 
 
