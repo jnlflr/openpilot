@@ -132,9 +132,9 @@ class CarInterface(CarInterfaceBase):
     
     elif candidate in [CAR.CIVIC, CAR.VROUM, CAR.ESSAI]:
       stop_and_go = False
-      ret.mass =  1200 + STD_CARGO_KG
-      ret.wheelbase = 2.606
-      ret.centerToFront = ret.wheelbase * 0.37
+      ret.mass =  1350. + STD_CARGO_KG #Clio 1200, Kadjar 1350
+      ret.wheelbase = 2.646 #Captur 2.606, Kadajr 2.646
+      ret.centerToFront = ret.wheelbase * 0.31
       ret.steerRatio = 15.2
       tire_stiffness_factor = 0.72
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.6], [0.18]]
