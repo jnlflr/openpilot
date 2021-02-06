@@ -197,7 +197,7 @@ class CarState():
 
     self.gear = 0 if self.CP.carFingerprint == CAR.CIVIC else cp.vl["MACCHINA"]['GEAR']
     #self.gear = 4 # cf DBC Honda
-    self.angle_steers = -(cp.vl["STEERING_SENSORS"]['STEER_ANGLE'])
+    self.angle_steers = -(cp.vl["STEERING_SENSORS"]['STEER_ANGLE']) # j'ai rajoute le - !! idem sur le rate
     self.angle_steers_rate = -(cp.vl["STEERING_SENSORS"]['STEER_ANGLE_RATE'])
 
     self.cruise_setting = cp.vl["MACCHINA"]['CRUISE_SETTING']

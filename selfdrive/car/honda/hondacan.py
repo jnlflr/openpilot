@@ -115,7 +115,7 @@ def create_long2(packer, idx, car_fingerprint,prob,astd,diststd,velstd,ystd):
 
 def create_steering_control(packer, apply_steer, apply_steer_clipped, angle_des, lkas_active, enabled, car_fingerprint, idx):
   values = {
-    "STEER_TORQUE": (apply_steer+1000.)/0.0005,
+    "STEER_TORQUE": (apply_steer+25000.)/0.0005,
     "STEER_CLIP": apply_steer_clipped+1000,
 	  "ANGLE_DES": (angle_des+300)/0.1,
   }
