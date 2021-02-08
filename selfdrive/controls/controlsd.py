@@ -399,6 +399,9 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     cloudlog.debug("rate mpc %s" % (sm['liveMpc'].rate0))
     cloudlog.debug("x1 mpc %s" % (sm['liveMpc'].x1))"""
 
+    cloudlog.debug("speed %f" % (CS.vEgo))
+
+
 
     can_sends.append(hondacan.create_left_lane(packer, idx, CP.carFingerprint,lPoly_can))
     can_sends.append(hondacan.create_right_lane(packer, idx, CP.carFingerprint,rPoly_can))
