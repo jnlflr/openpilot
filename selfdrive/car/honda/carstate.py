@@ -48,9 +48,6 @@ def get_can_signals(CP):
       ("STEER_ANGLE", "STEERING_SENSORS", 0),
       ("STEER_ANGLE_RATE", "STEERING_SENSORS", 0),
       ("STEER_TORQUE", "STEERING_CONTROL", 0),
-
-      ("PEDAL_GAS", "POWERTRAIN_DATA", 0),
-      ("BRAKE_PRESSED", "POWERTRAIN_DATA", 0),
       
       ("STEER_TORQUE_DRIVER", "MACCHINA", 0),
       ("ACC_STATUS", "MACCHINA", 0),   #???
@@ -65,7 +62,6 @@ def get_can_signals(CP):
   ]
 
   checks = [
-      ("POWERTRAIN_DATA", 100),
       ("WHEEL_SPEEDS_F", 50),
       ("WHEEL_SPEEDS_R", 50),
       ("STEERING_SENSORS", 100),
@@ -218,7 +214,7 @@ class CarState():
     can_gear_shifter = int(cp.vl["MACCHINA"]['GEAR_SHIFTER'])
     self.gear_shifter = parse_gear_shifter(can_gear_shifter, self.shifter_values)
 
-    self.pedal_gas = cp.vl["POWERTRAIN_DATA"]['PEDAL_GAS']
+    self.pedal_gas = 0
     self.car_gas = self.pedal_gas
 
     self.steer_torque_driver = cp.vl["MACCHINA"]['STEER_TORQUE_DRIVER']
@@ -233,11 +229,11 @@ class CarState():
       self.cruise_speed_offset = calc_cruise_offset(0, self.v_ego)
       if self.CP.carFingerprint in (CAR.ACCORD, CAR.CIVIC):
         self.brake_switch = 0
-        self.brake_pressed = cp.vl["POWERTRAIN_DATA"]['BRAKE_PRESSED']
+        self.brake_pressed = 0
         self.brake_switch_prev = self.brake_switch
         self.brake_switch_ts = 0
       else:
-        self.brake_pressed = cp.vl["POWERTRAIN_DATA"]['BRAKE_PRESSED']
+        self.brake_pressed = 0
       # On set, cruise set speed pulses between 254~255 and the set speed prev is set to avoid this.
       self.v_cruise_pcm = self.v_cruise_pcm_prev if cp.vl["ACC_HUD"]['CRUISE_SPEED'] > 160.0 else cp.vl["ACC_HUD"]['CRUISE_SPEED']
       self.v_cruise_pcm_prev = self.v_cruise_pcm
@@ -249,7 +245,7 @@ class CarState():
       self.v_cruise_pcm = 0
       # brake switch has shown some single time step noise, so only considered when
       # switch is on for at least 2 consecutive CAN samples
-      self.brake_pressed = cp.vl["POWERTRAIN_DATA"]['BRAKE_PRESSED']
+      self.brake_pressed = 0
       self.brake_switch_prev = 0
       self.brake_switch_ts = 0
 
