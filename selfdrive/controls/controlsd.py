@@ -381,7 +381,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
     can_sends = CI.apply(CC)
     idx = sm.frame % 4
 
-    z = [100000000,1000000,100000,10000]
+    z = [100000000,1000000,100000,5000]
     b = [30000,30000,30000,30000]
     lPoly_can = [0,0,0,0]
     rPoly_can = [0,0,0,0]
